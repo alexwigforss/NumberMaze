@@ -1,4 +1,4 @@
-﻿using static Android.Content.ClipData;
+﻿// using static Android.Content.ClipData;
 namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
