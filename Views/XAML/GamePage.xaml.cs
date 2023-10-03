@@ -1,4 +1,5 @@
-﻿namespace GridDemos.Views.XAML
+﻿
+namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
     {
@@ -7,4 +8,5 @@
             InitializeComponent();
         }
     }
+
 }
