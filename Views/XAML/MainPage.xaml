@@ -1,0 +1,26 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:GridDemos.Views.XAML"
+             xmlns:codeViews="clr-namespace:GridDemos.Views.Code"
+             x:Class="GridDemos.MainPage"
+             Title="Number Maze">
+    <TableView>
+        <TableRoot>
+            <TableSection Title="XAML">
+                <TextCell Text="Basic Grid demo"
+                          Detail="Full syntax"
+                          Command="{Binding NavigateCommand}"
+                          CommandParameter="{x:Type views:GamePage}"/>
+                <TextCell Text="Basic Grid demo"
+                          Detail="Simplified syntax"
+                          Command="{Binding NavigateCommand}"
+                          CommandParameter="{x:Type views:GameSimpPage}" />
+                <TextCell Text="Instruktioner"
+                          Detail=" "
+                          Command="{Binding NavigateCommand}"
+                          CommandParameter="{x:Type views:Instruktioner}" />
+            </TableSection>
+        </TableRoot>
+    </TableView>
+
+</ContentPage>
