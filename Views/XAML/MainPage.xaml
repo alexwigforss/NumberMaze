@@ -4,6 +4,7 @@
              xmlns:codeViews="clr-namespace:GridDemos.Views.Code"
              x:Class="GridDemos.MainPage"
              Title="Number Maze">
+    <VerticalStackLayout>
     <TableView>
         <TableRoot>
             <TableSection Title="XAML">
@@ -22,5 +23,7 @@
             </TableSection>
         </TableRoot>
     </TableView>
+    <Image Source="giphy.gif" />
+    </VerticalStackLayout>
 
 </ContentPage>

@@ -6,6 +6,11 @@ namespace GridDemos.Views.XAML
         public GamePage()
         {
             InitializeComponent();
+            gameGrid.Add(new BoxView
+            {
+                ZIndex = -1,
+                Color = Colors.Blue
+            }, 5, 5);
         }
     }
     
