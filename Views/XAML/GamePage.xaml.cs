@@ -1,5 +1,4 @@
 ﻿using static Android.Content.ClipData;
-
 namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
@@ -9,8 +8,7 @@ namespace GridDemos.Views.XAML
             InitializeComponent();
         }
     }
-
-
+    
 	struct Vector2D
 	{
 		public int X { get; set; }
@@ -113,9 +111,5 @@ namespace GridDemos.Views.XAML
 		}
 
 	}
-
-
-
-
 
 }
