@@ -2,7 +2,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GridDemos.Views.XAML.GamePage"
+             xmlns:local="clr-namespace:_2DGraphicsDrawing"
              Title="Basic Grid demo">
+    
+    <ContentPage.Resources>
+        <local:GraphicsDrawable x:Key="drawable"/>
+    </ContentPage.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -14,17 +20,15 @@
         <Label Text="Stats AND Messages Area"
                HorizontalOptions="Center"
                VerticalOptions="Center" />
-        
+
         <BoxView Grid.Row="1"
                  Color="Teal" />
-        <!--<Image Grid.Row="1"
-               MinimumHeightRequest="400"
-               MinimumWidthRequest="400"
-               Source="dotnet_bot.png" />
-        <Label Grid.Row="1"
-               Text="Game Area"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />-->
+
+        <GraphicsView
+            HorizontalOptions="Fill"
+            Drawable="{StaticResource drawable}"
+            WidthRequest="400"
+            HeightRequest="400" />
         <Grid x:Name="gameGrid" Grid.Row="1">
             <!-- Define your grid rows and columns here -->
             <Grid.RowDefinitions>
