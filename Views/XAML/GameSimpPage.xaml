@@ -19,6 +19,41 @@
                Text="Game Area"
                HorizontalOptions="Center"
                VerticalOptions="Center" />
+
+      
+      
+      <!--Flyttat lite bös hit för ev referens senare.-->
+        <!--<Image x:Name="thehero" 
+                Source="dotnet_bot.png"
+                       Grid.Row="5"
+                       Grid.Column="5"
+                       ToolTipProperties.Text="Click to Save your data"/>
+            <Label Text="100"
+                       BackgroundColor="Gray"
+                       Opacity="0.8"
+                       ZIndex="1"
+                       MaximumHeightRequest="20"
+                       MaximumWidthRequest="20"
+                       AbsoluteLayout.LayoutBounds="0.2, 0.2, 50, 50"
+                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                       Grid.Row="0"
+                       Grid.Column="1"/>-->
+
+        <!--<Image Source="fruit_tree2.png"  Grid.Row="0" Grid.Column="1" />
+            <Image Source="giphy.gif"  Grid.Row="0" Grid.Column="2" />
+            <Image Source="fruit_tree2.png"  Grid.Row="0" Grid.Column="3" />
+            <Image Source="fruit_tree2.png"  Grid.Row="0" Grid.Column="4" />
+
+            <Image Source="walk_attack2.png" Grid.Row="1" Grid.Column="1" />
+
+
+            <Image Source="fruit_tree2.png"  Grid.Row="4" Grid.Column="4" />
+            <Image Source="fruit_tree2.png"  Grid.Row="6" Grid.Column="6" />
+            <Image Source="fruit_tree2.png"  Grid.Row="7" Grid.Column="7" />
+            <Image Source="fruit_tree2.png"  Grid.Row="8" Grid.Column="8" />
+            <Image Source="fruit_tree2.png"  Grid.Row="9" Grid.Column="9" />
+            <Image Source="orc.png"          Grid.Row="4" Grid.Column="2" />-->
+
         <BoxView Grid.Row="2"
                  Color="Red" />
         <Label Grid.Row="2"
