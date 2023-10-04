@@ -126,5 +126,24 @@ namespace GridDemos.Views.XAML
 		}
 
 	}
+	class Level
+	{
+		public string Name { set; get; }
+		public string Blueprint { set; get; }
+		public int Difficulty { set; get; }
+		public int Width { set; get; }
+		public int Height { set; get; }
+
+
+		public Level(string name, string blueprint, int difficulty, int width, int height)
+		{
+			Name = name;
+			Blueprint = blueprint;
+			Difficulty = difficulty;
+			Width = width;
+			Height = height;
+		}
+
+	}
 
 }
