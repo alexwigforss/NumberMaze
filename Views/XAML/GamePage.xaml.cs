@@ -1,11 +1,13 @@
 ﻿// using static Android.Content.ClipData;
 using System.Xml.Linq;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
     {
-		Hero hero = new Hero("namnet", new Vector2D(6, 5));
+		int remIndex;
+        Hero hero = new Hero("namnet", new Vector2D(6, 5));
         public GamePage()
         {
             InitializeComponent();
@@ -25,8 +27,15 @@ namespace GridDemos.Views.XAML
                 Source = ImageSource.FromFile("dotnet_bot.png"),
                 ZIndex = 1,
             }, hero.Position.X, hero.Position.Y);
+			// bilden är inlagd så vi sparar dess index som är den sista i gridens
+			remIndex = gameGrid.Count - 1;
+			msg.Text = "Hej och hå";
         }
 
+		private void Remove()
+		{
+            gameGrid.RemoveAt(remIndex);
+		}
         private void Doit()
         {
             gameGrid.Add(new Image
@@ -34,27 +43,32 @@ namespace GridDemos.Views.XAML
                 Source = ImageSource.FromFile("dotnet_bot.png"),
                 ZIndex = 1,
             }, hero.Position.X, hero.Position.Y);
+            remIndex = gameGrid.Count - 1;
         }
 
 		private void Button_Left_Clicked(object sender, EventArgs e)
-        {	// Nedan ger inget error men returnar null och gör därmed inte jobbet.
-            // Image heroImage = gameGrid.FindByName<Image>("heroImage");
-            // gameGrid.Children.Remove(heroImage);
+        {   // Nedan ger inget error men returnar null och gör därmed inte jobbet.
+			// Image heroImage = gameGrid.FindByName<Image>("heroImage");
+			// gameGrid.Children.Remove(heroImage);
+			Remove();
             hero.Move(0);
 			Doit();
         }
         private void Button_Up_Clicked(object sender, EventArgs e)
         {
+            Remove();
             hero.Move(1);
 			Doit();
         }
         private void Button_Down_Clicked(object sender, EventArgs e)
         {
+            Remove();
             hero.Move(2);
 			Doit();
         }
         private void Button_Right_Clicked(object sender, EventArgs e)
         {
+            Remove();
             hero.Move(3);
 			Doit();
         }
