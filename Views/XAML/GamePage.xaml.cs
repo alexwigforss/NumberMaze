@@ -38,12 +38,12 @@ namespace GridDemos.Views.XAML
 		}
         private void Doit()
         {
-            gameGrid.Add(new Image
-            {
-                Source = ImageSource.FromFile("dotnet_bot.png"),
-                ZIndex = 1,
-            }, hero.Position.X, hero.Position.Y);
-            remIndex = gameGrid.Count - 1;
+				gameGrid.Add(new Image
+				{
+					Source = ImageSource.FromFile("dotnet_bot.png"),
+					ZIndex = 1,
+				}, hero.Position.X, hero.Position.Y);
+				remIndex = gameGrid.Count - 1;	
         }
 
 		private void Button_Left_Clicked(object sender, EventArgs e)
@@ -123,16 +123,16 @@ namespace GridDemos.Views.XAML
 		}
 
 		public void Move(int direction){
-			if (direction == 0) {
+			if (direction == 0 && Position.X>0) {
                 Position = new Vector2D(Position.X-1, Position.Y);
 			}
-			if (direction == 1) {
+			if (direction == 1 && Position.Y>0) {
                 Position = new Vector2D(Position.X, Position.Y-1);
 			}
-			if (direction == 2) {
+			if (direction == 2 && Position.Y<9) {
                 Position = new Vector2D(Position.X, Position.Y+1);
 			}
-			if (direction == 3) {
+			if (direction == 3 && Position.X<9) {
                 Position = new Vector2D(Position.X+1, Position.Y);
 			}
 		}
