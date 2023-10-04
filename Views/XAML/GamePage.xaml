@@ -99,5 +99,22 @@
                Text="Buttons AND/OR Pickups"
                HorizontalOptions="Center"
                VerticalOptions="Center" />
+        <!-- Buttons -->
+        <HorizontalStackLayout Grid.Row="2">
+            
+            <Button Text="LEFT"
+                    Clicked="Button_Left_Clicked"
+                    />
+            <Button Text="UP" 
+                    Clicked="Button_Up_Clicked"
+                    />
+            <Button Text="DOWN" 
+                    Clicked="Button_Down_Clicked"
+                    />
+            <Button Text="RIGHT" 
+                    Clicked="Button_Right_Clicked"
+                    />
+            
+        </HorizontalStackLayout>
     </Grid>
 </ContentPage>
