@@ -11,6 +11,16 @@ namespace GridDemos.Views.XAML
                 ZIndex = -1,
                 Color = Colors.Blue
             }, 5, 5);
+            gameGrid.Add(new BoxView
+            {
+                ZIndex = -1,
+                Color = Colors.BlueViolet
+            }, 6, 5);
+			gameGrid.Add(new Image
+			{
+                Source = ImageSource.FromFile("dotnet_bot.png"),
+                ZIndex = 1,
+			}, 7, 5 );
         }
     }
     

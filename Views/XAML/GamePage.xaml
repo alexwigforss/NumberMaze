@@ -29,6 +29,7 @@
             Drawable="{StaticResource drawable}"
             WidthRequest="400"
             HeightRequest="400" />
+        
         <Grid x:Name="gameGrid" Grid.Row="1">
             <!-- Define your grid rows and columns here -->
             <Grid.RowDefinitions>
