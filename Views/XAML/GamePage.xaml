@@ -17,7 +17,8 @@
         </Grid.RowDefinitions>
 
         <BoxView Color="Green" />
-        <Label Text="Stats AND Messages Area"
+        <Label x:Name="msg"
+               Text="Stats AND Messages Area"
                HorizontalOptions="Center"
                VerticalOptions="Center" />
 
@@ -60,7 +61,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Add Image controls to your grid cells -->
-            <Image Source="dotnet_bot.png"
+            <!--<Image x:Name="thehero" 
+                Source="dotnet_bot.png"
                        Grid.Row="5"
                        Grid.Column="5"
                        ToolTipProperties.Text="Click to Save your data"/>
@@ -73,7 +75,7 @@
                        AbsoluteLayout.LayoutBounds="0.2, 0.2, 50, 50"
                        AbsoluteLayout.LayoutFlags="PositionProportional"
                        Grid.Row="0"
-                       Grid.Column="1"/>
+                       Grid.Column="1"/>-->
             
             <Image Source="fruit_tree2.png"  Grid.Row="0" Grid.Column="1" />
             <Image Source="giphy.gif"  Grid.Row="0" Grid.Column="2" />
