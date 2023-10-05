@@ -138,9 +138,21 @@ namespace GridDemos.Views.XAML
         public bool CollideWall(Vector2D position, Level level, int direction) 
         {
             bool collide = false;
-            if (direction == 0 && level.BpArray[position.Y,position.X-1] == '█')
+            if (direction == 0 && level.BpArray[position.X - 1,position.Y] == '█')
             {
                 collide = true; 
+            }
+            if (direction == 1 && level.BpArray[position.X, position.Y - 1] == '█')
+            {
+                collide = true;
+            }
+            if (direction == 2 && level.BpArray[position.X, position.Y + 1] == '█')
+            {
+                collide = true;
+            }
+            if (direction == 3 && level.BpArray[position.X + 1, position.Y] == '█')
+            {
+                collide = true;
             }
             return collide;
         }
@@ -165,23 +177,25 @@ namespace GridDemos.Views.XAML
 
         public void Move(int direction)
         {
+            //FIXME Ge actor tillgång till level och byt ut new level till level
+
             //Left
             if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
             //Up
-            if (direction == 1 && Position.Y > 0)
+            if (direction == 1 && Position.Y > 0 && !CollideWall(Position, new Level("test"), 1))
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
             //Down
-            if (direction == 2 && Position.Y < 9)
+            if (direction == 2 && Position.Y < 9 && !CollideWall(Position, new Level("test"), 2))
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
             //Right
-            if (direction == 3 && Position.X < 9)
+            if (direction == 3 && Position.X < 9 && !CollideWall(Position, new Level("test"), 3))
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
