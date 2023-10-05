@@ -24,7 +24,17 @@
 
         <BoxView Grid.Row="1"
                  Color="Teal" />
+        
+        <Label x:Name="heropos"
+               Text=".."
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
 
+        <!--<GraphicsView
+            HorizontalOptions="Fill"
+            Drawable="{StaticResource drawable}"
+            WidthRequest="400"
+            HeightRequest="400" />-->
         
         <Grid x:Name="gameGrid" Grid.Row="1">
             <!-- Define your grid rows and columns here -->

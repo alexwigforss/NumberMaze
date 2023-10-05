@@ -1,4 +1,5 @@
 ﻿// using static Android.Content.ClipData;
+using Microsoft.Maui.Controls;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using static Microsoft.Maui.ApplicationModel.Permissions;
@@ -29,6 +30,8 @@ namespace GridDemos.Views.XAML
             remIndex = gameGrid.Count - 1;
 
             DrawMap();
+            msg.Text = "";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
         }
 
         private bool DrawMap()
@@ -57,6 +60,7 @@ namespace GridDemos.Views.XAML
 
         private void Doit(bool turn = false)
         {
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
             gameGrid.Add(new Image
             {
                 Source = ImageSource.FromFile("walk_attack2.png"),
@@ -67,7 +71,14 @@ namespace GridDemos.Views.XAML
             remIndex = gameGrid.Count - 1;
             Image element = this.FindByName<Image>("test");
         }
-
+        /*private void Remove()
+        {
+			gameGrid.Add(new BoxView
+			{
+				ZIndex = 1,
+				Color = Colors.Teal
+			}, hero.Position.X, hero.Position.Y);
+        }*/
         private void Button_Left_Clicked(object sender, EventArgs e)
         {   
             Remove();
@@ -124,8 +135,27 @@ namespace GridDemos.Views.XAML
 
         public void Attack() { }
         public virtual void Move() { }
-
-        public void CollideWall() { }
+        public bool CollideWall(Vector2D position, Level level, int direction) 
+        {
+            bool collide = false;
+            if (direction == 0 && level.BpArray[position.X - 1,position.Y] == '█')
+            {
+                collide = true; 
+            }
+            if (direction == 1 && level.BpArray[position.X, position.Y - 1] == '█')
+            {
+                collide = true;
+            }
+            if (direction == 2 && level.BpArray[position.X, position.Y + 1] == '█')
+            {
+                collide = true;
+            }
+            if (direction == 3 && level.BpArray[position.X + 1, position.Y] == '█')
+            {
+                collide = true;
+            }
+            return collide;
+        }
 
 
     }
@@ -147,19 +177,25 @@ namespace GridDemos.Views.XAML
 
         public void Move(int direction)
         {
-            if (direction == 0 && Position.X > 0)
+            //FIXME Ge actor tillgång till level och byt ut new level till level
+
+            //Left
+            if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
-            if (direction == 1 && Position.Y > 0)
+            //Up
+            if (direction == 1 && Position.Y > 0 && !CollideWall(Position, new Level("test"), 1))
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
-            if (direction == 2 && Position.Y < 9)
+            //Down
+            if (direction == 2 && Position.Y < 9 && !CollideWall(Position, new Level("test"), 2))
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
-            if (direction == 3 && Position.X < 9)
+            //Right
+            if (direction == 3 && Position.X < 9 && !CollideWall(Position, new Level("test"), 3))
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
