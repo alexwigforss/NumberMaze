@@ -6,7 +6,7 @@
              Title="Basic Grid demo">
     
     <ContentPage.Resources>
-        <local:GraphicsDrawable x:Key="drawable"/>
+        <local:TestDrawable x:Key="drawable"/>
     </ContentPage.Resources>
 
     <Grid>
@@ -60,9 +60,6 @@
                 <!-- Add more columns as needed -->
             </Grid.ColumnDefinitions>
 
-            <!-- Add Image controls to your grid cells -->
-
-            <!-- Add more images to other grid cells -->
         </Grid>
 
         <BoxView Grid.Row="2"

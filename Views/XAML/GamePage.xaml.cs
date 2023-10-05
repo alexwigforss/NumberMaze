@@ -14,8 +14,7 @@ namespace GridDemos.Views.XAML
         {
             InitializeComponent();
             // FIXME För att kartan ska skrivas ut behöver man starta spelet två gånger
-            DrawMap();
-
+            level = new Level("Template");
             gameGrid.Add(new BoxView
             {
                 ZIndex = 1,
@@ -25,11 +24,12 @@ namespace GridDemos.Views.XAML
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
-                Source = ImageSource.FromFile("dotnet_bot.png"),
+                Source = ImageSource.FromFile("walk_attack2.png"),
                 ZIndex = 1,
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
-            msg.Text = "Hej och hå";
+
+            DrawMap();
         }
 
         private bool DrawMap()
@@ -55,12 +55,14 @@ namespace GridDemos.Views.XAML
         {
             gameGrid.RemoveAt(remIndex);
         }
-        private void Doit()
+
+        private void Doit(bool turn = false)
         {
             gameGrid.Add(new Image
             {
-                Source = ImageSource.FromFile("dotnet_bot.png"),
+                Source = ImageSource.FromFile("walk_attack2.png"),
                 ZIndex = 1,
+                // Flow
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
         }
@@ -110,10 +112,10 @@ namespace GridDemos.Views.XAML
         public string Name { set; get; }
 
         Vector2D position;
-        public Vector2D Position// { set; get; }
+        public Vector2D Position
         {
-            get { return position; }   // get method
-            set { position = value; }  // set method
+            get { return position; }
+            set { position = value; }
         }
         public Actor(string name, Vector2D position)
         {
