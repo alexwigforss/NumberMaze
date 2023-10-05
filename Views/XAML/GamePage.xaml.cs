@@ -8,12 +8,11 @@ namespace GridDemos.Views.XAML
     public partial class GamePage : ContentPage
     {
         int remIndex;
-        Level level = new Level("Template");
+        Level level;// = new Level("Template");
         Hero hero = new Hero("namnet", new Vector2D(6, 5));
         public GamePage()
         {
             InitializeComponent();
-            // FIXME För att kartan ska skrivas ut behöver man starta spelet två gånger
             level = new Level("Template");
             gameGrid.Add(new BoxView
             {
@@ -62,15 +61,15 @@ namespace GridDemos.Views.XAML
             {
                 Source = ImageSource.FromFile("walk_attack2.png"),
                 ZIndex = 1,
-                // Flow
+                StyleId = "test",
+                ClassId = "test",
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
+            Image element = this.FindByName<Image>("test");
         }
 
         private void Button_Left_Clicked(object sender, EventArgs e)
-        {   // Nedan ger inget error men returnar null och gör därmed inte jobbet.
-            // Image heroImage = gameGrid.FindByName<Image>("heroImage");
-            // gameGrid.Children.Remove(heroImage);
+        {   
             Remove();
             hero.Move(0);
             Doit();
@@ -241,6 +240,8 @@ namespace GridDemos.Views.XAML
         //public Level(string name, string blueprint, int difficulty, int width, int height)
         public Level(string name)
         {
+            Width = 10;
+            Height = 10;
             Name = name;
             blueprint = "██████████\n" +
                         "█        █\n" +
@@ -266,8 +267,6 @@ namespace GridDemos.Views.XAML
             "██████████"};
             bpArray = StringArrToCharArr(bpLines);
             Difficulty = 0;
-            Width = 10;
-            Height = 10;
         }
 
         public static char[,] StringArrToCharArr(string[] stringarr)

@@ -25,11 +25,6 @@
         <BoxView Grid.Row="1"
                  Color="Teal" />
 
-        <GraphicsView
-            HorizontalOptions="Fill"
-            Drawable="{StaticResource drawable}"
-            WidthRequest="400"
-            HeightRequest="400" />
         
         <Grid x:Name="gameGrid" Grid.Row="1">
             <!-- Define your grid rows and columns here -->
@@ -61,6 +56,14 @@
             </Grid.ColumnDefinitions>
 
         </Grid>
+        <GraphicsView
+            x:Name="grafik"
+            Grid.Row="1"
+            ZIndex="2"
+            HorizontalOptions="Fill"
+            Drawable="{StaticResource drawable}"
+            WidthRequest="400"
+            HeightRequest="400" />
 
         <BoxView Grid.Row="2"
                  Color="Red" />

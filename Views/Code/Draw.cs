@@ -1,6 +1,4 @@
-﻿
-
-namespace _2DGraphicsDrawing;
+﻿namespace _2DGraphicsDrawing;
 
 public class TestDrawable : IDrawable
 {
