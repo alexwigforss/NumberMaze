@@ -9,6 +9,7 @@ namespace GridDemos.Views.XAML
     public partial class GamePage : ContentPage
     {
         int remIndex;
+        string heroFileName = "walk_attack2.png";
         Level level;// = new Level("Template");
         Hero hero = new Hero("namnet", new Vector2D(6, 5));
         public GamePage()
@@ -24,7 +25,7 @@ namespace GridDemos.Views.XAML
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
-                Source = ImageSource.FromFile("walk_attack2.png"),
+                Source = ImageSource.FromFile(heroFileName),
                 ZIndex = 1,
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
@@ -58,12 +59,17 @@ namespace GridDemos.Views.XAML
             gameGrid.RemoveAt(remIndex);
         }
 
-        private void Doit(bool turn = false)
+        private void Doit(int dir = -1)
         {
+            if ((dir == 0)&&(heroFileName == "walk_attack2.png"))
+                heroFileName = "walk_attack2left.png";
+            else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
+                heroFileName = "walk_attack2.png";
+
             heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
             gameGrid.Add(new Image
             {
-                Source = ImageSource.FromFile("walk_attack2.png"),
+                Source = ImageSource.FromFile(heroFileName),
                 ZIndex = 1,
                 StyleId = "test",
                 ClassId = "test",
@@ -80,10 +86,10 @@ namespace GridDemos.Views.XAML
 			}, hero.Position.X, hero.Position.Y);
         }*/
         private void Button_Left_Clicked(object sender, EventArgs e)
-        {   
+        {
             Remove();
             hero.Move(0);
-            Doit();
+            Doit(0);
         }
         private void Button_Up_Clicked(object sender, EventArgs e)
         {
@@ -101,7 +107,7 @@ namespace GridDemos.Views.XAML
         {
             Remove();
             hero.Move(3);
-            Doit();
+            Doit(3);
         }
     }
 
@@ -135,12 +141,12 @@ namespace GridDemos.Views.XAML
 
         public void Attack() { }
         public virtual void Move() { }
-        public bool CollideWall(Vector2D position, Level level, int direction) 
+        public bool CollideWall(Vector2D position, Level level, int direction)
         {
             bool collide = false;
-            if (direction == 0 && level.BpArray[position.X - 1,position.Y] == '█')
+            if (direction == 0 && level.BpArray[position.X - 1, position.Y] == '█')
             {
-                collide = true; 
+                collide = true;
             }
             if (direction == 1 && level.BpArray[position.X, position.Y - 1] == '█')
             {
@@ -163,7 +169,7 @@ namespace GridDemos.Views.XAML
     class Hero : Actor
     {
         public List<Pickups> Inventory { set; get; }
-
+        static int preDir = 2;
 
         public Hero(string name, Vector2D position) : base(name, position)
         {
@@ -175,10 +181,9 @@ namespace GridDemos.Views.XAML
             Inventory.Add(item);
         }
 
-        public void Move(int direction)
+        public int Move(int direction)
         {
             //FIXME Ge actor tillgång till level och byt ut new level till level
-
             //Left
             if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
             {
@@ -199,6 +204,8 @@ namespace GridDemos.Views.XAML
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
+            return direction;
+            //preDir = direction;
         }
 
         public void CollideEnemy() { }
