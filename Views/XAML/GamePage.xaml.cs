@@ -1,4 +1,5 @@
 ﻿// using static Android.Content.ClipData;
+using Microsoft.Maui.Controls;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using static Microsoft.Maui.ApplicationModel.Permissions;
@@ -30,6 +31,8 @@ namespace GridDemos.Views.XAML
             remIndex = gameGrid.Count - 1;
 
             DrawMap();
+            msg.Text = "";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
         }
 
         private bool DrawMap()
@@ -58,20 +61,27 @@ namespace GridDemos.Views.XAML
 
         private void Doit(bool turn = false)
         {
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
             gameGrid.Add(new Image
             {
                 Source = ImageSource.FromFile("walk_attack2.png"),
                 ZIndex = 1,
-                // Flow
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
         }
-
+        /*private void Remove()
+        {
+			gameGrid.Add(new BoxView
+			{
+				ZIndex = 1,
+				Color = Colors.Teal
+			}, hero.Position.X, hero.Position.Y);
+        }*/
         private void Button_Left_Clicked(object sender, EventArgs e)
-        {   // Nedan ger inget error men returnar null och gör därmed inte jobbet.
+        {	// Nedan ger inget error men returnar null och gör därmed inte jobbet.
             // Image heroImage = gameGrid.FindByName<Image>("heroImage");
             // gameGrid.Children.Remove(heroImage);
-            Remove();
+			Remove();
             hero.Move(0);
             Doit();
         }
@@ -125,8 +135,15 @@ namespace GridDemos.Views.XAML
 
         public void Attack() { }
         public virtual void Move() { }
-
-        public void CollideWall() { }
+        public bool CollideWall(Vector2D position, Level level, int direction) 
+        {
+            bool collide = false;
+            if (direction == 0 && level.BpArray[position.Y,position.X-1] == '█')
+            {
+                collide = true; 
+            }
+            return collide;
+        }
 
 
     }
@@ -148,18 +165,22 @@ namespace GridDemos.Views.XAML
 
         public void Move(int direction)
         {
-            if (direction == 0 && Position.X > 0)
+            //Left
+            if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
+            //Up
             if (direction == 1 && Position.Y > 0)
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
+            //Down
             if (direction == 2 && Position.Y < 9)
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
+            //Right
             if (direction == 3 && Position.X < 9)
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
