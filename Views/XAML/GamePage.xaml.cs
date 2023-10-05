@@ -31,6 +31,8 @@ namespace GridDemos.Views.XAML
             remIndex = gameGrid.Count - 1;
 
             DrawMap();
+            msg.Text = "";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
         }
 
         private bool DrawMap()
@@ -59,6 +61,7 @@ namespace GridDemos.Views.XAML
 
         private void Doit(bool turn = false)
         {
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
             gameGrid.Add(new Image
             {
                 Source = ImageSource.FromFile("walk_attack2.png"),
@@ -132,8 +135,15 @@ namespace GridDemos.Views.XAML
 
         public void Attack() { }
         public virtual void Move() { }
-
-        public void CollideWall() { }
+        public bool CollideWall(Vector2D position, Level level, int direction) 
+        {
+            bool collide = false;
+            if (direction == 0 && level.BpArray[position.Y,position.X-1] == '█')
+            {
+                collide = true; 
+            }
+            return collide;
+        }
 
 
     }
@@ -155,18 +165,22 @@ namespace GridDemos.Views.XAML
 
         public void Move(int direction)
         {
-            if (direction == 0 && Position.X > 0)
+            //Left
+            if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
+            //Up
             if (direction == 1 && Position.Y > 0)
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
+            //Down
             if (direction == 2 && Position.Y < 9)
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
+            //Right
             if (direction == 3 && Position.X < 9)
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
