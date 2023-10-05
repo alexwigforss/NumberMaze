@@ -9,28 +9,49 @@ namespace GridDemos.Views.XAML
     {
         int remIndex;
         Level level = new Level("Template");
-        Hero hero = new Hero("namnet", new Vector2D(6, 5));
-        public GamePage()
+        Hero hero = new Hero("namnet", "hero", new Vector2D(6, 5));
+		Hero tree1 = new Hero("namnet", "hero", new Vector2D(1, 1));
+		Hero tree2 = new Hero("namnet", "hero", new Vector2D(2, 2));
+		List<Actor> actors = new List<Actor>();
+        
+
+		public GamePage()
         {
             InitializeComponent();
             // FIXME För att kartan ska skrivas ut behöver man starta spelet två gånger
-            DrawMap();
+            //DrawMap();
 
-            gameGrid.Add(new BoxView
-            {
-                ZIndex = 1,
-                Color = Colors.DarkGray
-            }, 0, 0);
+            actors.Add(tree1);
+            actors.Add(tree2);
+            //actors.Add(hero);
+            
+            
+            
+			gameGrid.Add(new Image
+			{
+				StyleId = "obstacle",
+				Source = ImageSource.FromFile("fruit_tree2.png"),
+				ZIndex = 1,
+			}, 2,2);
+			
+			
 
-            gameGrid.Add(new Image
-            {
-                StyleId = "heroImage",
-                Source = ImageSource.FromFile("dotnet_bot.png"),
-                ZIndex = 1,
-            }, hero.Position.X, hero.Position.Y);
-            remIndex = gameGrid.Count - 1;
-            msg.Text = "Hej och hå";
-        }
+			gameGrid.Add(new Image
+			{
+				StyleId = "obstacle",
+				Source = ImageSource.FromFile("fruit_tree2.png"),
+				ZIndex = 1,
+			}, 1,1);
+
+			gameGrid.Add(new Image
+			{
+				StyleId = "heroImage",
+				Source = ImageSource.FromFile("dotnet_bot.png"),
+				ZIndex = 1,
+			}, hero.Position.X, hero.Position.Y);
+			remIndex = gameGrid.Count - 1;
+
+		}
 
         private bool DrawMap()
         {
@@ -75,9 +96,20 @@ namespace GridDemos.Views.XAML
         }
         private void Button_Up_Clicked(object sender, EventArgs e)
         {
-            Remove();
-            hero.Move(1);
-            Doit();
+            bool canMove = true;
+            foreach (var actor in actors)
+            {
+                if (hero.Position.X == actor.Position.X && hero.Position.Y-1 == actor.Position.Y) {
+                    canMove = false;
+                }
+            }
+            if (canMove)
+            {
+				Remove();
+				hero.Move(1);
+				Doit();
+			}
+            
         }
         private void Button_Down_Clicked(object sender, EventArgs e)
         {
@@ -109,16 +141,19 @@ namespace GridDemos.Views.XAML
     {
         public string Name { set; get; }
 
-        Vector2D position;
+		public string Type { set; get; }
+
+		Vector2D position;
         public Vector2D Position// { set; get; }
         {
             get { return position; }   // get method
             set { position = value; }  // set method
         }
-        public Actor(string name, Vector2D position)
+        public Actor(string name, string type, Vector2D position)
         {
             Name = name;
             Position = position;
+            Type = type;
         }
 
         public void Attack() { }
@@ -134,7 +169,7 @@ namespace GridDemos.Views.XAML
         public List<Pickups> Inventory { set; get; }
 
 
-        public Hero(string name, Vector2D position) : base(name, position)
+        public Hero(string name, string type, Vector2D position) : base(name, type, position)
         {
             Inventory = new List<Pickups>();
         }
@@ -167,7 +202,27 @@ namespace GridDemos.Views.XAML
         public void CollideEnemy() { }
     }
 
-    class Enemy : Actor
+	class Obstacle : Actor
+	{
+		public int Id { set; get; }
+		public int Strength { set; get; }
+		public int Behaviour { set; get; }
+
+		public Enum Behaviours;
+
+		public Obstacle(string name, string type, Vector2D vector, int id, int str, int behaviour) : base(name, type, vector)
+		{
+			Id = id;
+			Strength = str;
+			Behaviour = behaviour;
+		}
+
+		public void RemoveSelf() { }
+
+		public void CollideOther() { }
+	}
+
+	class Enemy : Actor
     {
         public int Id { set; get; }
         public int Strength { set; get; }
@@ -175,7 +230,7 @@ namespace GridDemos.Views.XAML
 
         public Enum Behaviours;
 
-        public Enemy(string name, Vector2D vector, int id, int str, int behaviour) : base(name, vector)
+        public Enemy(string name, string type, Vector2D vector, int id, int str, int behaviour) : base(name, type, vector)
         {
             Id = id;
             Strength = str;
@@ -301,4 +356,5 @@ namespace GridDemos.Views.XAML
         }
 
     }
+
 }
