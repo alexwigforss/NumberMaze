@@ -1,4 +1,5 @@
 ﻿// using static Android.Content.ClipData;
+using Microsoft.Maui.Controls;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using static Microsoft.Maui.ApplicationModel.Permissions;
@@ -62,16 +63,21 @@ namespace GridDemos.Views.XAML
             {
                 Source = ImageSource.FromFile("walk_attack2.png"),
                 ZIndex = 1,
-                // Flow
             }, hero.Position.X, hero.Position.Y);
-            remIndex = gameGrid.Count - 1;
         }
-
+        private void Remove()
+        {
+			gameGrid.Add(new BoxView
+			{
+				ZIndex = 1,
+				Color = Colors.Teal
+			}, hero.Position.X, hero.Position.Y);
+        }
         private void Button_Left_Clicked(object sender, EventArgs e)
-        {   // Nedan ger inget error men returnar null och gör därmed inte jobbet.
+        {	// Nedan ger inget error men returnar null och gör därmed inte jobbet.
             // Image heroImage = gameGrid.FindByName<Image>("heroImage");
             // gameGrid.Children.Remove(heroImage);
-            Remove();
+			Remove();
             hero.Move(0);
             Doit();
         }
