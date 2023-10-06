@@ -1,5 +1,6 @@
 ﻿// using static Android.Content.ClipData;
 using Microsoft.Maui.Controls;
+using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using static Microsoft.Maui.ApplicationModel.Permissions;
@@ -41,7 +42,7 @@ namespace GridDemos.Views.XAML
             {
                 for (int j = 0; j <= level.BpArray.GetUpperBound(1); j++)
                 {
-                    if (level.BpArray[i, j] == '█')
+                    if (level.BpArray[i, j] == 'T')
                     {
 						gameGrid.Add(new Image
 						{
@@ -50,12 +51,66 @@ namespace GridDemos.Views.XAML
 							ZIndex = 1,
 						}, i, j);
 						gameGrid.Add(new BoxView
-                        {
-                            ZIndex = 0,
-                            Color = Colors.DarkGreen
-                        }, i, j);
-                    }
-                }
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
+						}, i, j);
+					}
+					else if (level.BpArray[i, j] == 't')
+					{
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("tree1.png"),
+							ZIndex = 1,
+						}, i, j);
+					}
+					else if (level.BpArray[i, j] == 'R')
+					{
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("ruins1.png"),
+							ZIndex = 1,
+						}, i, j);
+					}
+					else if (level.BpArray[i, j] == 'W')
+					{
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("wall.png"),
+							ZIndex = 1,
+						}, i, j);
+					}
+					else if (level.BpArray[i, j] == 'S')
+					{
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("rock.png"),
+							ZIndex = 1,
+						}, i, j);
+					}
+					else if (level.BpArray[i, j] == 'F')
+					{
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("fern.png"),
+							ZIndex = 1,
+						}, i, j);
+					}
+					else if (level.BpArray[i, j] == 'b')
+					{
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("bush.png"),
+							ZIndex = 1,
+						}, i, j);
+					}
+				}
             }
             return true;
         }
@@ -292,28 +347,28 @@ namespace GridDemos.Views.XAML
             Width = 10;
             Height = 10;
             Name = name;
-            blueprint = "██████████\n" +
-                        "█        █\n" +
-                        "█  ████  █\n" +
-                        "█  ████  █\n" +
-                        "█  █    ██\n" +
-                        "█       ██\n" +
-                        "█ ██    ██\n" +
-                        "█ ███  ███\n" +
-                        "█   █  ███\n" +
-                        "██████████";
+            blueprint = "TTSBSSBTBT\n" +
+                        "S        S\n" +
+                        "S  TSBT  S\n" +
+                        "T  BSTT  S\n" +
+                        "S  S    TT\n" +
+                        "B       BT\n" +
+                        "B TS    ST\n" +
+                        "S BBT  SBT\n" +
+                        "T   S  TBT\n" +
+                        "BBBBBTSBBB";
             bpLines = new string[]
             {
-            "██████████",
-            "█        █",
-            "█  ████  █",
-            "█  ████  █",
-            "█  █    ██",
-            "█       ██",
-            "█ ██    ██",
-            "█ ███  ███",
-            "█   █  ███",
-            "██████████"};
+            "TtBTFFSFFT",
+            "t        T",
+            "t  TTRW  F",
+            "T  TSTW  T",
+            "F  T    TF",
+            "T       TS",
+            "T TR    FT",
+            "F FTW  TFF",
+            "T   W  bTS",
+            "bbTbSSTSST"};
             bpArray = StringArrToCharArr(bpLines);
             Difficulty = 0;
         }
