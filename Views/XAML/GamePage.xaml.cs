@@ -43,11 +43,17 @@ namespace GridDemos.Views.XAML
                 {
                     if (level.BpArray[i, j] == '█')
                     {
-                        gameGrid.Add(new BoxView
-                        {
-                            ZIndex = 1,
-                            Color = Colors.DarkGray
-                        }, i, j);
+						gameGrid.Add(new Image
+						{
+							StyleId = "obstacle",
+							Source = ImageSource.FromFile("fruit_tree2.png"),
+							ZIndex = 1,
+						}, i, j);
+						//gameGrid.Add(new BoxView
+                        //{
+                        //    ZIndex = 1,
+                        //    Color = Colors.DarkGray
+                        //}, i, j);
                     }
                 }
             }
