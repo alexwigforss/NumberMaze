@@ -389,7 +389,7 @@ namespace GridDemos.Views.XAML
                         "BBBBBTSBBB";
             bpLines = new string[]
             {
-            "TtBTFFSFFT",
+            "TtbTFFSFFT",
             "t        T",
             "t  TTRW  F",
             "T  TSTW  T",
