@@ -64,6 +64,11 @@ namespace GridDemos.Views.XAML
 							Source = ImageSource.FromFile("tree1.png"),
 							ZIndex = 1,
 						}, i, j);
+						gameGrid.Add(new BoxView
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
+						}, i, j);
 					}
 					else if (level.BpArray[i, j] == 'R')
 					{
@@ -72,6 +77,11 @@ namespace GridDemos.Views.XAML
 							StyleId = "obstacle",
 							Source = ImageSource.FromFile("ruins1.png"),
 							ZIndex = 1,
+						}, i, j);
+						gameGrid.Add(new BoxView
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
 						}, i, j);
 					}
 					else if (level.BpArray[i, j] == 'W')
@@ -82,6 +92,11 @@ namespace GridDemos.Views.XAML
 							Source = ImageSource.FromFile("wall.png"),
 							ZIndex = 1,
 						}, i, j);
+						gameGrid.Add(new BoxView
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
+						}, i, j);
 					}
 					else if (level.BpArray[i, j] == 'S')
 					{
@@ -90,6 +105,11 @@ namespace GridDemos.Views.XAML
 							StyleId = "obstacle",
 							Source = ImageSource.FromFile("rock.png"),
 							ZIndex = 1,
+						}, i, j);
+						gameGrid.Add(new BoxView
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
 						}, i, j);
 					}
 					else if (level.BpArray[i, j] == 'F')
@@ -100,6 +120,11 @@ namespace GridDemos.Views.XAML
 							Source = ImageSource.FromFile("fern.png"),
 							ZIndex = 1,
 						}, i, j);
+						gameGrid.Add(new BoxView
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
+						}, i, j);
 					}
 					else if (level.BpArray[i, j] == 'b')
 					{
@@ -108,6 +133,11 @@ namespace GridDemos.Views.XAML
 							StyleId = "obstacle",
 							Source = ImageSource.FromFile("bush.png"),
 							ZIndex = 1,
+						}, i, j);
+						gameGrid.Add(new BoxView
+						{
+							ZIndex = 0,
+							Color = Colors.DarkGreen
 						}, i, j);
 					}
 				}
