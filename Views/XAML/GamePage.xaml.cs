@@ -144,19 +144,19 @@ namespace GridDemos.Views.XAML
         public bool CollideWall(Vector2D position, Level level, int direction)
         {
             bool collide = false;
-            if (direction == 0 && level.BpArray[position.X - 1, position.Y] == '█')
+            if (direction == 0 && level.BpArray[position.X - 1, position.Y] != ' ')
             {
                 collide = true;
             }
-            if (direction == 1 && level.BpArray[position.X, position.Y - 1] == '█')
+            if (direction == 1 && level.BpArray[position.X, position.Y - 1] != ' ')
             {
                 collide = true;
             }
-            if (direction == 2 && level.BpArray[position.X, position.Y + 1] == '█')
+            if (direction == 2 && level.BpArray[position.X, position.Y + 1] != ' ')
             {
                 collide = true;
             }
-            if (direction == 3 && level.BpArray[position.X + 1, position.Y] == '█')
+            if (direction == 3 && level.BpArray[position.X + 1, position.Y] != ' ')
             {
                 collide = true;
             }
