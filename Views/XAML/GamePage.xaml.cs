@@ -16,11 +16,11 @@ namespace GridDemos.Views.XAML
         {
             InitializeComponent();
             level = new Level("Template");
-            gameGrid.Add(new BoxView
+            /*gameGrid.Add(new BoxView
             {
                 ZIndex = 1,
                 Color = Colors.DarkGray
-            }, 0, 0);
+            }, 0, 0);*/
 
             gameGrid.Add(new Image
             {
@@ -49,11 +49,11 @@ namespace GridDemos.Views.XAML
 							Source = ImageSource.FromFile("fruit_tree2.png"),
 							ZIndex = 1,
 						}, i, j);
-						//gameGrid.Add(new BoxView
-                        //{
-                        //    ZIndex = 1,
-                        //    Color = Colors.DarkGray
-                        //}, i, j);
+						gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
                     }
                 }
             }
