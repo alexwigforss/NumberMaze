@@ -10,9 +10,11 @@ namespace GridDemos.Views.XAML
     public partial class GamePage : ContentPage
     {
         int remIndex;
+        int EnemyRemIndex;
         string heroFileName = "walk_attack2.png";
         Level level;// = new Level("Template");
         Hero hero = new Hero("namnet", new Vector2D(6, 5));
+        Enemy enemy = new Enemy("fiende", new Vector2D(7,1), 1, 1, 1);
         public GamePage()
         {
             InitializeComponent();
@@ -31,9 +33,17 @@ namespace GridDemos.Views.XAML
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
 
+            gameGrid.Add(new Image
+            {
+                StyleId = "EnemyImage",
+                Source = ImageSource.FromFile("orc.png"),
+                ZIndex = 1,
+            }, enemy.Position.X, enemy.Position.Y);
+            EnemyRemIndex = gameGrid.Count - 1;
+
             DrawMap();
             msg.Text = "";
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Random:{enemy.direction}";
         }
 
         private bool DrawMap()
@@ -148,6 +158,8 @@ namespace GridDemos.Views.XAML
         private void Remove()
         {
             gameGrid.RemoveAt(remIndex);
+            if (EnemyRemIndex > remIndex) EnemyRemIndex -= 1;
+            gameGrid.RemoveAt(EnemyRemIndex);
         }
 
         private void Doit(int dir = -1)
@@ -157,7 +169,7 @@ namespace GridDemos.Views.XAML
             else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
                 heroFileName = "walk_attack2.png";
 
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Random:{enemy.direction}";
             gameGrid.Add(new Image
             {
                 Source = ImageSource.FromFile(heroFileName),
@@ -167,6 +179,16 @@ namespace GridDemos.Views.XAML
             }, hero.Position.X, hero.Position.Y);
             remIndex = gameGrid.Count - 1;
             Image element = this.FindByName<Image>("test");
+
+            enemy.Move();
+            gameGrid.Add(new Image
+            {
+                Source = ImageSource.FromFile("orc.png"),
+                ZIndex = 1,
+                StyleId = "test",
+                ClassId = "test",
+            }, enemy.Position.X, enemy.Position.Y);
+            EnemyRemIndex = gameGrid.Count - 1;
         }
         /*private void Remove()
         {
@@ -307,6 +329,7 @@ namespace GridDemos.Views.XAML
         public int Id { set; get; }
         public int Strength { set; get; }
         public int Behaviour { set; get; }
+        public int direction;
 
         public Enum Behaviours;
 
@@ -320,6 +343,32 @@ namespace GridDemos.Views.XAML
         public void RemoveSelf() { }
 
         public void CollideOther() { }
+
+        public void Move()
+        {
+            Random rnd = new Random();
+            direction = rnd.Next(0,4);
+            if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
+            {
+                Position = new Vector2D(Position.X - 1, Position.Y);
+            }
+            //Up
+            else if (direction == 1 && Position.Y > 0 && !CollideWall(Position, new Level("test"), 1))
+            {
+                Position = new Vector2D(Position.X, Position.Y - 1);
+            }
+            //Down
+            else if (direction == 2 && Position.Y < 9 && !CollideWall(Position, new Level("test"), 2))
+            {
+                Position = new Vector2D(Position.X, Position.Y + 1);
+            }
+            //Right
+            else if (direction == 3 && Position.X < 9 && !CollideWall(Position, new Level("test"), 3))
+            {
+                Position = new Vector2D(Position.X + 1, Position.Y);
+            }
+            else direction += 0;
+        }
     }
 
     class Pickups
