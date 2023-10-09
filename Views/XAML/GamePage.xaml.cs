@@ -33,7 +33,7 @@ namespace GridDemos.Views.XAML
 
             DrawMap();
             msg.Text = "";
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Random:{enemy.direction}";
+            //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Random:{enemy.direction}";
             heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}";
         }
 
@@ -171,7 +171,7 @@ namespace GridDemos.Views.XAML
             else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
                 heroFileName = "walk_attack2.png";
 
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength} ";
             gameGrid.Add(new Image
             {
                 Source = ImageSource.FromFile(heroFileName),
@@ -251,23 +251,63 @@ namespace GridDemos.Views.XAML
         public bool CollideWall(Vector2D position, Level level, int direction)
         {
             bool collide = false;
-            if (direction == 0 && level.BpArray[position.Y, position.X - 1] != ' ')
+            if (direction == 0 && level.BpArray[position.Y, position.X - 1] != ' ' && !Char.IsNumber(level.BpArray[position.Y, position.X - 1]))
             {
                 collide = true;
             }
-            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ')
+            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ' && !Char.IsNumber(level.BpArray[position.Y - 1, position.X]))
             {
                 collide = true;
             }
-            if (direction == 2 && level.BpArray[position.Y + 1,position.X] != ' ')
+            if (direction == 2 && level.BpArray[position.Y + 1,position.X] != ' ' && !Char.IsNumber(level.BpArray[position.Y + 1, position.X]))
             {
                 collide = true;
             }
-            if (direction == 3 && level.BpArray[position.Y,position.X + 1] != ' ')
+            if (direction == 3 && level.BpArray[position.Y,position.X + 1] != ' ' && !Char.IsNumber(level.BpArray[position.Y, position.X + 1]))
             {
                 collide = true;
             }
             return collide;
+        }
+        public int CollideWallOrNum(Vector2D position, Level level, int direction)
+        {
+            if (direction == 0 && level.BpArray[position.Y, position.X - 1] != ' ')
+            {
+                if (char.IsNumber(level.BpArray[position.Y, position.X - 1]))
+                {
+                    int slask = level.BpArray[position.Y, position.X - 1];
+                    return slask - 48;
+                }
+                return -1;
+            }
+            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ')
+            {
+                if (char.IsNumber(level.BpArray[position.Y - 1, position.X]))
+                {
+                    int slask = level.BpArray[position.Y - 1, position.X];
+                    return slask - 48;
+                }
+                return -1;
+            }
+            if (direction == 2 && level.BpArray[position.Y + 1,position.X] != ' ')
+            {
+                if (char.IsNumber(level.BpArray[position.Y + 1, position.X]))
+                {
+                    int slask = level.BpArray[position.Y + 1, position.X];
+                    return slask - 48;
+                }
+                return -1;
+            }
+            if (direction == 3 && level.BpArray[position.Y,position.X + 1] != ' ')
+            {
+                if (char.IsNumber(level.BpArray[position.Y, position.X + 1]))
+                {
+                    int slask = level.BpArray[position.Y, position.X + 1];
+                    return slask - 48;
+                }
+                return -1;
+            }
+            return 0;
         }
 
 
@@ -295,24 +335,51 @@ namespace GridDemos.Views.XAML
         {
             //FIXME Ge actor tillgång till level och byt ut new level till level
             //Left
-            if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
+            if (direction == 0 && Position.X > 0 && CollideWallOrNum(Position, new Level("test"), 0) == 0)
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
+            else if(direction == 0 && CollideWallOrNum(Position, new Level("test"), 0) > 0)
+            {
+                Strength += CollideWallOrNum(Position, new Level("test"), 0);
+                Position = new Vector2D(Position.X - 1, Position.Y);
+                // siffran skrivas över med tom
+            }
             //Up
-            if (direction == 1 && Position.Y > 0 && !CollideWall(Position, new Level("test"), 1))
+            if (direction == 1 && Position.Y > 0 && CollideWallOrNum(Position, new Level("test"), 1) == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
+            else if(direction == 1 && CollideWallOrNum(Position, new Level("test"), 1) > 0)
+            {
+                Strength += CollideWallOrNum(Position, new Level("test"), 1);
+                Position = new Vector2D(Position.X, Position.Y - 1);
+                // siffran skrivas över med tom
+                // streeangth öka med siffra
+            }
             //Down
-            if (direction == 2 && Position.Y < 9 && !CollideWall(Position, new Level("test"), 2))
+            if (direction == 2 && Position.Y < 9 && CollideWallOrNum(Position, new Level("test"), 2) == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
+            else if(direction == 2 && CollideWallOrNum(Position, new Level("test"), 2) > 0)
+            {
+                Strength += CollideWallOrNum(Position, new Level("test"), 2);
+                Position = new Vector2D(Position.X, Position.Y + 1);
+                // siffran skrivas över med tom
+                // streeangth öka med siffra
+            }
             //Right
-            if (direction == 3 && Position.X < 9 && !CollideWall(Position, new Level("test"), 3))
+            if (direction == 3 && Position.X < 9 && CollideWallOrNum(Position, new Level("test"), 3) == 0)
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
+            }
+            else if(direction == 3 && CollideWallOrNum(Position, new Level("test"), 3) > 0)
+            {
+                Strength += CollideWallOrNum(Position, new Level("test"), 3);
+                Position = new Vector2D(Position.X + 1, Position.Y);
+                // siffran skrivas över med tom
+                // streeangth öka med siffra
             }
             return direction;
             //preDir = direction;
@@ -345,6 +412,7 @@ namespace GridDemos.Views.XAML
         {
             Random rnd = new Random();
             direction = rnd.Next(0,4);
+            //Up
             if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
@@ -436,9 +504,9 @@ namespace GridDemos.Views.XAML
             bpLines = new string[]
             {
             "T bTFFSFFT",
-            "t    2   T",
-            "t  TTRW  F",
-            "T  TSTW  T",
+            "t    2 11T",
+            "t  TTRW11F",
+            "T  TSTW11T",
             "F  T    TF",
             "T       TS",
             "T TR    FT",
