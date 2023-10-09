@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
@@ -6,11 +8,15 @@ namespace GridDemos.Views.XAML
         int nrOfRemNr;
         int EnemyRemIndex;
         string heroFileName = "walk_attack2.png";
+
         List<Pickup> pickups = new List<Pickup>();
 
         Level level;
         Hero hero;
         Enemy enemy = new Enemy("fiende", new Vector2D(3,8), 1, 1, 1);
+
+        // Hero hero = new Hero("namnet", new Vector2D(6, 5));
+
         public GamePage()
         {
             nrOfRemNr = 0;
@@ -35,7 +41,18 @@ namespace GridDemos.Views.XAML
 
             DrawMap();
             msg.Text = "";
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}";
+
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}, Lives:{hero.liv}";
+        }
+
+        private async Task gameoverAsync()
+        {
+            bool answer = await DisplayAlert("Game over!","Would you like to go back to the menu?", "Yes", "Quit");
+            if (answer)
+            {
+                await Navigation.PopAsync();
+            }
+            else System.Environment.Exit(0);
         }
 
         private bool DrawMap()
@@ -174,11 +191,30 @@ namespace GridDemos.Views.XAML
             }
             return result;
         }
-
+        private async Task Lose()
+        {
+            await DisplayAlert("Fight", "You Lost the fight", "OK");
+        }
         private int strid(int enemyid)
         {
             int result = 1;
-            enemy.dead = true;
+            if (hero.Strength >= enemy.Strength)
+            {
+                enemy.dead = true;
+            }
+            else
+            {
+                hero.liv -= 1;
+                heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
+                if (hero.liv < 0)
+                {
+                    _ = gameoverAsync();
+                }
+                else
+                {
+                    _ = Lose();
+                }
+            }
             return result;
         }
 
@@ -195,6 +231,7 @@ namespace GridDemos.Views.XAML
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
             
             heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{remIndex}";
+            //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
                 gameGrid.Add(new Image
                 {
                     Source = ImageSource.FromFile(heroFileName),
@@ -386,6 +423,8 @@ namespace GridDemos.Views.XAML
         private Level lvl;
 
         public Hero(string name, Vector2D position, Level lvl) : base(name, position)
+        public int liv = 3;
+        //public Hero(string name, Vector2D position) : base(name, position)
         {
             Inventory = new List<Pickup>();
             Strength = 0;
