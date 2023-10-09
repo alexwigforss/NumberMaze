@@ -1,5 +1,3 @@
-﻿// using static Android.Content.ClipData;
-
 namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
@@ -164,33 +162,61 @@ namespace GridDemos.Views.XAML
             gameGrid.RemoveAt(EnemyRemIndex);
         }
 
+        public int CollideEnemy()
+        {
+            int result = 0;
+            if (hero.Position.X == enemy.Position.X && hero.Position.Y == enemy.Position.Y)
+            {
+                result = enemy.Id;
+            }
+            return result;
+        }
+
+        private int strid(int enemyid)
+        {
+            int result = 1;
+            enemy.dead = true;
+            return result;
+        }
+
         private void Doit(int dir = -1)
         {
+            int stridres = 0;
+
             if ((dir == 0)&&(heroFileName == "walk_attack2.png"))
                 heroFileName = "walk_attack2left.png";
             else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
                 heroFileName = "walk_attack2.png";
 
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
-            gameGrid.Add(new Image
-            {
-                Source = ImageSource.FromFile(heroFileName),
-                ZIndex = 1,
-                StyleId = "test",
-                ClassId = "test",
-            }, hero.Position.X, hero.Position.Y);
+
+            if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
+            
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Random:{enemy.direction}";
+                gameGrid.Add(new Image
+                {
+                    Source = ImageSource.FromFile(heroFileName),
+                    ZIndex = 1,
+                    StyleId = "test",
+                    ClassId = "test",
+                }, hero.Position.X, hero.Position.Y);
+
             remIndex = gameGrid.Count - 1;
             Image element = this.FindByName<Image>("test");
 
             enemy.Move();
-            gameGrid.Add(new Image
+            if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
+
+            if (!enemy.dead)
             {
-                Source = ImageSource.FromFile("orc.png"),
-                ZIndex = 1,
-                StyleId = "test",
-                ClassId = "test",
-            }, enemy.Position.X, enemy.Position.Y);
-            EnemyRemIndex = gameGrid.Count - 1;
+                gameGrid.Add(new Image
+                {
+                    Source = ImageSource.FromFile("orc.png"),
+                    ZIndex = 1,
+                    StyleId = "test",
+                    ClassId = "test",
+                }, enemy.Position.X, enemy.Position.Y);
+                EnemyRemIndex = gameGrid.Count - 1;
+            }
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
         {
@@ -318,7 +344,9 @@ namespace GridDemos.Views.XAML
             //preDir = direction;
         }
 
-        public void CollideEnemy() { }
+        public void CollideEnemy() 
+        {
+        }
     }
 
     class Enemy : Actor
@@ -327,6 +355,7 @@ namespace GridDemos.Views.XAML
         public int Strength { set; get; }
         public int Behaviour { set; get; }
         public int direction;
+        public bool dead = false;
 
         public Enum Behaviours;
 
@@ -423,16 +452,6 @@ namespace GridDemos.Views.XAML
             Width = 10;
             Height = 10;
             Name = name;
-            //blueprint = "TTSBSSBTBT\n" +
-            //            "S        S\n" +
-            //            "S  TSBT  S\n" +
-            //            "T  BSTT  S\n" +
-            //            "S  S    TT\n" +
-            //            "B       BT\n" +
-            //            "B TS    ST\n" +
-            //            "S BBT  SBT\n" +
-            //            "T   S  TBT\n" +
-            //            "BBBBBTSBBB";
             bpLines = new string[]
             {
             "T bTFFSFFT",
