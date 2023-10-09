@@ -42,7 +42,7 @@ namespace GridDemos.Views.XAML
             {
                 for (int j = 0; j <= level.BpArray.GetUpperBound(1); j++)
                 {
-                    if (level.BpArray[i, j] == 'T')
+                    if (level.BpArray[j, i] == 'T')
                     {
 						gameGrid.Add(new Image
 						{
@@ -56,7 +56,7 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
-					else if (level.BpArray[i, j] == 't')
+					else if (level.BpArray[j, i] == 't')
 					{
 						gameGrid.Add(new Image
 						{
@@ -70,7 +70,7 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
-					else if (level.BpArray[i, j] == 'R')
+					else if (level.BpArray[j, i] == 'R')
 					{
 						gameGrid.Add(new Image
 						{
@@ -84,7 +84,7 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
-					else if (level.BpArray[i, j] == 'W')
+					else if (level.BpArray[j, i] == 'W')
 					{
 						gameGrid.Add(new Image
 						{
@@ -98,7 +98,7 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
-					else if (level.BpArray[i, j] == 'S')
+					else if (level.BpArray[j, i] == 'S')
 					{
 						gameGrid.Add(new Image
 						{
@@ -112,7 +112,7 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
-					else if (level.BpArray[i, j] == 'F')
+					else if (level.BpArray[j, i] == 'F')
 					{
 						gameGrid.Add(new Image
 						{
@@ -126,7 +126,7 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
-					else if (level.BpArray[i, j] == 'b')
+					else if (level.BpArray[j, i] == 'b')
 					{
 						gameGrid.Add(new Image
 						{
@@ -235,19 +235,19 @@ namespace GridDemos.Views.XAML
         public bool CollideWall(Vector2D position, Level level, int direction)
         {
             bool collide = false;
-            if (direction == 0 && level.BpArray[position.X - 1, position.Y] != ' ')
+            if (direction == 0 && level.BpArray[position.Y, position.X - 1] != ' ')
             {
                 collide = true;
             }
-            if (direction == 1 && level.BpArray[position.X, position.Y - 1] != ' ')
+            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ')
             {
                 collide = true;
             }
-            if (direction == 2 && level.BpArray[position.X, position.Y + 1] != ' ')
+            if (direction == 2 && level.BpArray[position.Y + 1,position.X] != ' ')
             {
                 collide = true;
             }
-            if (direction == 3 && level.BpArray[position.X + 1, position.Y] != ' ')
+            if (direction == 3 && level.BpArray[position.Y,position.X + 1] != ' ')
             {
                 collide = true;
             }
@@ -377,19 +377,19 @@ namespace GridDemos.Views.XAML
             Width = 10;
             Height = 10;
             Name = name;
-            blueprint = "TTSBSSBTBT\n" +
-                        "S        S\n" +
-                        "S  TSBT  S\n" +
-                        "T  BSTT  S\n" +
-                        "S  S    TT\n" +
-                        "B       BT\n" +
-                        "B TS    ST\n" +
-                        "S BBT  SBT\n" +
-                        "T   S  TBT\n" +
-                        "BBBBBTSBBB";
+            //blueprint = "TTSBSSBTBT\n" +
+            //            "S        S\n" +
+            //            "S  TSBT  S\n" +
+            //            "T  BSTT  S\n" +
+            //            "S  S    TT\n" +
+            //            "B       BT\n" +
+            //            "B TS    ST\n" +
+            //            "S BBT  SBT\n" +
+            //            "T   S  TBT\n" +
+            //            "BBBBBTSBBB";
             bpLines = new string[]
             {
-            "TtbTFFSFFT",
+            "T bTFFSFFT",
             "t        T",
             "t  TTRW  F",
             "T  TSTW  T",
