@@ -82,20 +82,32 @@
                VerticalOptions="Center" />
         <!-- Buttons -->
         <HorizontalStackLayout Grid.Row="2">
-            
+
+
             <Button Text="LEFT"
+                    x:Name="btnleft"
+                    WidthRequest="100"
                     Clicked="Button_Left_Clicked"
                     />
-            <Button Text="UP" 
+            <VerticalStackLayout>
+                <Button Text="UP"
+                    x:Name="btnup"
+                    WidthRequest="200"
+                    MinimumHeightRequest="53"
+                    HorizontalOptions="Fill"
                     Clicked="Button_Up_Clicked"
                     />
-            <Button Text="DOWN" 
+                <Button Text="DOWN" 
+                    MinimumHeightRequest="53"
+                    x:Name="btndown"
                     Clicked="Button_Down_Clicked"
                     />
+            </VerticalStackLayout>
             <Button Text="RIGHT" 
+                    WidthRequest="100"
                     Clicked="Button_Right_Clicked"
                     />
-            
+
         </HorizontalStackLayout>
     </Grid>
 </ContentPage>
