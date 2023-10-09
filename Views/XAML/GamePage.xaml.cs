@@ -3,16 +3,20 @@ namespace GridDemos.Views.XAML
     public partial class GamePage : ContentPage
     {
         int remIndex;
+        int nrOfRemNr;
         int EnemyRemIndex;
         string heroFileName = "walk_attack2.png";
-        Level level;// = new Level("Template");
-        Hero hero = new Hero("namnet", new Vector2D(6, 5));
-        Enemy enemy = new Enemy("fiende", new Vector2D(7,1), 1, 1, 1);
+        List<Pickup> pickups = new List<Pickup>();
+
+        Level level;
+        Hero hero;
+        Enemy enemy = new Enemy("fiende", new Vector2D(3,8), 1, 1, 1);
         public GamePage()
         {
+            nrOfRemNr = 0;
             InitializeComponent();
             level = new Level("Template");
-
+            hero = new Hero("namnet", new Vector2D(6, 5), level);
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
@@ -31,7 +35,6 @@ namespace GridDemos.Views.XAML
 
             DrawMap();
             msg.Text = "";
-            //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Random:{enemy.direction}";
             heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}";
         }
 
@@ -143,12 +146,12 @@ namespace GridDemos.Views.XAML
 					{
 						gameGrid.Add(new Label
 						{
-							StyleId = "obstacle",
-							Text = level.BpArray[j, i].ToString(),
+							Text = level.BpArray[j, i].ToString() + "\n" + (gameGrid.Count - 1),
                             HorizontalTextAlignment = TextAlignment.Center,
                             VerticalTextAlignment = TextAlignment.Center,
 							ZIndex = 1,
 						}, i, j);
+                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count - 1));
 					}
 				}
             }
@@ -191,17 +194,17 @@ namespace GridDemos.Views.XAML
 
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
             
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{remIndex}";
                 gameGrid.Add(new Image
                 {
                     Source = ImageSource.FromFile(heroFileName),
                     ZIndex = 1,
-                    StyleId = "test",
-                    ClassId = "test",
+                    //StyleId = "test",
+                    //ClassId = "test",
                 }, hero.Position.X, hero.Position.Y);
 
             remIndex = gameGrid.Count - 1;
-            Image element = this.FindByName<Image>("test");
+            //Image element = this.FindByName<Image>("test");
 
             enemy.Move();
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
@@ -212,42 +215,75 @@ namespace GridDemos.Views.XAML
                 {
                     Source = ImageSource.FromFile("orc.png"),
                     ZIndex = 1,
-                    StyleId = "test",
-                    ClassId = "test",
+                    //StyleId = "test",
+                    //ClassId = "test",
                 }, enemy.Position.X, enemy.Position.Y);
                 EnemyRemIndex = gameGrid.Count - 1;
             }
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
         {
+            bool wasNum = false;
             Remove();
-            hero.Move(0);
+            hero.Move(0,out wasNum);
+            if (wasNum)
+            {
+                RemoveNumByPos(hero.Position);
+            }
             Doit(0);
         }
         private void Button_Up_Clicked(object sender, EventArgs e)
         {
+            bool wasNum = false;
             Remove();
-            hero.Move(1);
+            hero.Move(1, out wasNum);
+            if (wasNum)
+            {
+                RemoveNumByPos(hero.Position);
+            }
             Doit();
         }
         private void Button_Down_Clicked(object sender, EventArgs e)
         {
+            bool wasNum = false;
             Remove();
-            hero.Move(2);
+            hero.Move(2, out wasNum);
+            if (wasNum)
+            {
+                RemoveNumByPos(hero.Position);
+            }
             Doit();
         }
         private void Button_Right_Clicked(object sender, EventArgs e)
         {
+            bool wasNum = false;
             Remove();
-            hero.Move(3);
+            hero.Move(3, out wasNum);
+            if (wasNum)
+            {
+                RemoveNumByPos(hero.Position);
+            }
             Doit(3);
+        }
+        public void RemoveNumByPos(Vector2D plpos)
+        {
+            int lastRemoved = 0;
+            foreach (Pickup p in pickups)
+            {
+                if ((p.Vector.X == plpos.X) && (p.Vector.Y == plpos.Y - 1))
+                {
+                    gameGrid.RemoveAt(p.RemNum - 1);
+                    lastRemoved = p.RemNum;
+                    return;
+                }
+            }
         }
     }
 
-    struct Vector2D
+    public struct Vector2D
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int X;
+        public int Y;
 
         public Vector2D(int x, int y)
         {
@@ -341,71 +377,77 @@ namespace GridDemos.Views.XAML
 
     class Hero : Actor
     {
-        public List<Pickups> Inventory { set; get; }
+        public List<Pickup> Inventory { set; get; }
         public int Strength { get => strength; set => strength = value; }
+        internal Level Lvl { get => lvl; set => lvl = value; }
+
         static int preDir = 2;
         private int strength;
+        private Level lvl;
 
-        public Hero(string name, Vector2D position) : base(name, position)
+        public Hero(string name, Vector2D position, Level lvl) : base(name, position)
         {
-            Inventory = new List<Pickups>();
+            Inventory = new List<Pickup>();
             Strength = 0;
+            Lvl = lvl;
         }
 
-        public void PickupItem(Pickups item)
+        public void PickupItem(Pickup item)
         {
             Inventory.Add(item);
         }
 
-        public int Move(int direction)
+        public int Move(int direction, out bool wNum)
         {
-            //FIXME Ge actor tillgång till level och byt ut new level till level
+            wNum = false;
+            //FIXME Ge actor tillgång till level och byt ut new level till lvl
             //Left
-            if (direction == 0 && Position.X > 0 && CollideWallOrNum(Position, new Level("test"), 0) == 0)
+            if (direction == 0 && Position.X > 0 && CollideWallOrNum(Position, lvl, 0) == 0)
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
-            else if(direction == 0 && CollideWallOrNum(Position, new Level("test"), 0) > 0)
+            else if(direction == 0 && CollideWallOrNum(Position, lvl, 0) > 0)
             {
-                Strength += CollideWallOrNum(Position, new Level("test"), 0);
+                Strength += CollideWallOrNum(Position, lvl, 0);
                 Position = new Vector2D(Position.X - 1, Position.Y);
-                // siffran skrivas över med tom
+                lvl.BpArray[Position.Y,Position.X] = ' ';
+                wNum = true;
             }
             //Up
-            if (direction == 1 && Position.Y > 0 && CollideWallOrNum(Position, new Level("test"), 1) == 0)
+            if (direction == 1 && Position.Y > 0 && CollideWallOrNum(Position, lvl, 1) == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
-            else if(direction == 1 && CollideWallOrNum(Position, new Level("test"), 1) > 0)
+            else if(direction == 1 && CollideWallOrNum(Position, lvl, 1) > 0)
             {
-                Strength += CollideWallOrNum(Position, new Level("test"), 1);
+                Strength += CollideWallOrNum(Position, lvl, 1);
                 Position = new Vector2D(Position.X, Position.Y - 1);
-                // siffran skrivas över med tom
-                // streeangth öka med siffra
+                lvl.BpArray[Position.Y, Position.X] = ' ';
+                wNum = true;
             }
             //Down
-            if (direction == 2 && Position.Y < 9 && CollideWallOrNum(Position, new Level("test"), 2) == 0)
+            if (direction == 2 && Position.Y < 9 && CollideWallOrNum(Position, lvl, 2) == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
-            else if(direction == 2 && CollideWallOrNum(Position, new Level("test"), 2) > 0)
+            else if(direction == 2 && CollideWallOrNum(Position, lvl, 2) > 0)
             {
-                Strength += CollideWallOrNum(Position, new Level("test"), 2);
+                Strength += CollideWallOrNum(Position, lvl, 2);
                 Position = new Vector2D(Position.X, Position.Y + 1);
-                // siffran skrivas över med tom
-                // streeangth öka med siffra
+                lvl.BpArray[Position.Y, Position.X] = ' ';
+                wNum = true;
             }
             //Right
-            if (direction == 3 && Position.X < 9 && CollideWallOrNum(Position, new Level("test"), 3) == 0)
+            if (direction == 3 && Position.X < 9 && CollideWallOrNum(Position, lvl, 3) == 0)
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
-            else if(direction == 3 && CollideWallOrNum(Position, new Level("test"), 3) > 0)
+            else if(direction == 3 && CollideWallOrNum(Position, lvl, 3) > 0)
             {
-                Strength += CollideWallOrNum(Position, new Level("test"), 3);
+                Strength += CollideWallOrNum(Position, lvl, 3);
                 Position = new Vector2D(Position.X + 1, Position.Y);
-                // siffran skrivas över med tom
-                // streeangth öka med siffra
+                lvl.BpArray[Position.Y, Position.X] = ' ';
+                wNum = true;
             }
             return direction;
             //preDir = direction;
@@ -465,41 +507,47 @@ namespace GridDemos.Views.XAML
         }
     }
 
-    class Pickups
+    class Pickup
     {
-        public string Name { set; get; }
-        public Vector2D Vector { set; get; }
+        public int Value;
+        public Vector2D Vector;
+        public int RemNum;
 
-        public Pickups(string name, Vector2D vector)
+        public Pickup(Vector2D vector)
         {
-            Name = name;
             Vector = vector;
-
         }
 
-    }
-
-    class Number : Pickups
-    {
-        public int Value { set; get; }
-
-        public Number(string name, Vector2D vector, int value) : base(name, vector)
+        public Pickup(int value, Vector2D vector, int remNum)
         {
             Value = value;
+            Vector = vector;
+            RemNum = remNum;
         }
 
+        public string Name { get; }
     }
 
-    class Operator : Pickups
+    //class Number : Pickup
+    //{
+    //    public Number(int value, Vector2D vector) : base(remNum)
+    //    {
+    //        Value = value;
+    //    }
+
+    //}
+
+    class Operator : Pickup
     {
         public char[] Signs { set; get; }
 
-        public Operator(string name, Vector2D vector, char[] signs) : base(name, vector)
+        public Operator(string name, Vector2D vector, char[] signs) : base(vector)
         {
             Signs = signs;
         }
 
     }
+
     class Level
     {
         string blueprint;
@@ -526,12 +574,21 @@ namespace GridDemos.Views.XAML
             "t    2 11T",
             "t  TTRW11F",
             "T  TSTW11T",
-            "F  T    TF",
+            "F  T     F",
             "T       TS",
             "T TR    FT",
             "F FTW  TFF",
             "T   W  bTS",
             "bbTbSSTSST"};
+            bpArray = StringArrToCharArr(bpLines);
+            Difficulty = 0;
+        }
+        public Level(string name, string[] bpl)
+        {
+            Width = 10;
+            Height = 10;
+            Name = name;
+            bpLines = bpl;
             bpArray = StringArrToCharArr(bpLines);
             Difficulty = 0;
         }
