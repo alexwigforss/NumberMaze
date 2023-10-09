@@ -1,9 +1,4 @@
 ﻿// using static Android.Content.ClipData;
-using Microsoft.Maui.Controls;
-using System.ComponentModel.Design;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
-using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace GridDemos.Views.XAML
 {
@@ -17,11 +12,6 @@ namespace GridDemos.Views.XAML
         {
             InitializeComponent();
             level = new Level("Template");
-            /*gameGrid.Add(new BoxView
-            {
-                ZIndex = 1,
-                Color = Colors.DarkGray
-            }, 0, 0);*/
 
             gameGrid.Add(new Image
             {
@@ -33,7 +23,7 @@ namespace GridDemos.Views.XAML
 
             DrawMap();
             msg.Text = "";
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}";
         }
 
         private bool DrawMap()
@@ -140,6 +130,17 @@ namespace GridDemos.Views.XAML
 							Color = Colors.DarkGreen
 						}, i, j);
 					}
+					else if (char.IsNumber(level.BpArray[j, i]))
+					{
+						gameGrid.Add(new Label
+						{
+							StyleId = "obstacle",
+							Text = level.BpArray[j, i].ToString(),
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            VerticalTextAlignment = TextAlignment.Center,
+							ZIndex = 1,
+						}, i, j);
+					}
 				}
             }
             return true;
@@ -157,7 +158,7 @@ namespace GridDemos.Views.XAML
             else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
                 heroFileName = "walk_attack2.png";
 
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y} ";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}";
             gameGrid.Add(new Image
             {
                 Source = ImageSource.FromFile(heroFileName),
@@ -168,14 +169,6 @@ namespace GridDemos.Views.XAML
             remIndex = gameGrid.Count - 1;
             Image element = this.FindByName<Image>("test");
         }
-        /*private void Remove()
-        {
-			gameGrid.Add(new BoxView
-			{
-				ZIndex = 1,
-				Color = Colors.Teal
-			}, hero.Position.X, hero.Position.Y);
-        }*/
         private void Button_Left_Clicked(object sender, EventArgs e)
         {
             Remove();
@@ -260,11 +253,14 @@ namespace GridDemos.Views.XAML
     class Hero : Actor
     {
         public List<Pickups> Inventory { set; get; }
+        public int Strength { get => strength; set => strength = value; }
         static int preDir = 2;
+        private int strength;
 
         public Hero(string name, Vector2D position) : base(name, position)
         {
             Inventory = new List<Pickups>();
+            Strength = 0;
         }
 
         public void PickupItem(Pickups item)
@@ -390,7 +386,7 @@ namespace GridDemos.Views.XAML
             bpLines = new string[]
             {
             "T bTFFSFFT",
-            "t        T",
+            "t    2   T",
             "t  TTRW  F",
             "T  TSTW  T",
             "F  T    TF",
