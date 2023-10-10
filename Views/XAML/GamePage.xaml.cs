@@ -12,19 +12,26 @@ namespace GridDemos.Views.XAML
 
         Level level;
         Hero hero;
-        Enemy enemy = new Enemy("fiende", new Vector2D(3,8), 1, 1, 1);
-        Enemy enemy2 = new Enemy("fiende2", new Vector2D(5, 1), 2, 1, 1);
+        Enemy enemy;
+        Enemy enemy2;
+        Enemy enemy3;
+        Enemy enemy4;
 
         public GamePage()
         {
-            enemyList.Add(enemy);
-            enemyList.Add(enemy2);
-            //enemyList.Add(new Enemy("fiende3", new Vector2D(4,1), 3, 1, 1));
             nrOfRemNr = 0;
             InitializeComponent();
             level = new Level("Template");
             hero = new Hero("namnet", new Vector2D(6, 5), level);
             enemy = new Enemy("fiende", new Vector2D(3, 8), 1, 1, 1, level);
+            enemy2 = new Enemy("fiende2", new Vector2D(5, 1), 2, 1, 1, level);
+            //enemy3 = new Enemy("fiende3", new Vector2D(4, 1), 3, 1, 1, level);
+            //enemy4 = new Enemy("fiende4", new Vector2D(4, 1), 4, 1, 1, level);
+            enemyList.Add(enemy);
+            enemyList.Add(enemy2);
+            //enemyList.Add(enemy3);
+            //enemyList.Add(enemy4);
+            //enemyList.Add(new Enemy("fiende3", new Vector2D(4,1), 3, 1, 1));
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
@@ -183,16 +190,13 @@ namespace GridDemos.Views.XAML
         private void Remove()
         {
             gameGrid.RemoveAt(hero.remIndex);
-            if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
+            //if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
             foreach (Pickup pick in pickups)
             {
                 if (pick.RemNum > hero.remIndex) pick.LowerIndex();
             }
-            gameGrid.RemoveAt(enemy.remIndex);
-            foreach (Pickup pick in pickups)
-            {
-                if (pick.RemNum > enemy.remIndex) pick.LowerIndex();
-            }
+            //gameGrid.RemoveAt(enemy.remIndex);
+
             int lastremoved = gameGrid.Count;
             foreach (Enemy e in enemyList)
             {
@@ -200,12 +204,16 @@ namespace GridDemos.Views.XAML
                 if (e.remIndex > lastremoved) e.remIndex -= 1;
                 gameGrid.RemoveAt(e.remIndex);
                 lastremoved = e.remIndex;
+                foreach (Pickup pick in pickups)
+                {
+                    if (pick.RemNum > e.remIndex) pick.LowerIndex();
+                }
             }
         }
 
-        }
+       
 
-        public int CollideEnemy()
+        private int CollideEnemy()
         {
             int result = 0;
             foreach (Enemy e in enemyList)
