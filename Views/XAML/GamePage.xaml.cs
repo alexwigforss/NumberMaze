@@ -165,7 +165,7 @@ namespace GridDemos.Views.XAML
                             VerticalTextAlignment = TextAlignment.Center,
 							ZIndex = 1,
 						}, i, j);
-                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count - 1));
+                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count-1));
 					}
 				}
             }
@@ -176,7 +176,16 @@ namespace GridDemos.Views.XAML
         {
             gameGrid.RemoveAt(hero.remIndex);
             if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
+            foreach (Pickup pick in pickups)
+            {
+                if (pick.RemNum > hero.remIndex) pick.LowerIndex();
+            }
             gameGrid.RemoveAt(enemy.remIndex);
+            foreach (Pickup pick in pickups)
+            {
+                if (pick.RemNum > enemy.remIndex) pick.LowerIndex();
+            }
+
         }
 
         public int CollideEnemy()
@@ -302,13 +311,16 @@ namespace GridDemos.Views.XAML
         }
         public void RemoveNumByPos(Vector2D plpos)
         {
-            int lastRemoved = 0;
+            //int lastRemoved = 0;
             foreach (Pickup p in pickups)
             {
-                if ((p.Vector.X == plpos.X) && (p.Vector.Y == plpos.Y - 1))
+                if ((p.Vector.X == plpos.X) && (p.Vector.Y == plpos.Y))
                 {
-                    gameGrid.RemoveAt(p.RemNum - 1);
-                    lastRemoved = p.RemNum;
+                    gameGrid.RemoveAt(p.RemNum);
+                    foreach (Pickup pick in pickups)
+                    {
+                        if (pick.RemNum > p.RemNum) pick.LowerIndex();
+                    }
                     return;
                 }
             }
@@ -559,13 +571,22 @@ namespace GridDemos.Views.XAML
             Vector = vector;
         }
 
+        /// <summary>
+        /// PICKUP
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="vector"></param>
+        /// <param name="remNum"></param>
         public Pickup(int value, Vector2D vector, int remNum)
         {
             Value = value;
             Vector = vector;
             RemNum = remNum;
         }
-
+        public void LowerIndex()
+        {
+            RemNum--;
+        }
         public string Name { get; }
     }
 
