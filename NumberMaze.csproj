@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\cretancirc.svg" />
 	  <None Remove="Resources\Images\fruit_tree2.png" />
 	  <None Remove="Resources\Images\giphy.gif" />
 	  <None Remove="Resources\Images\orc.png" />

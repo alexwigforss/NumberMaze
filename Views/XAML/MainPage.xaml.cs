@@ -18,6 +18,8 @@ namespace GridDemos
                 });
 
             BindingContext = this;
+            cretaimg.RotateTo(3600, 100000);
+            cretaimg.Rotation = 0;
         }
 	}
 }
