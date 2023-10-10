@@ -4,9 +4,7 @@ namespace GridDemos.Views.XAML
 {
     public partial class GamePage : ContentPage
     {
-        int remIndex;
         int nrOfRemNr;
-        int EnemyRemIndex;
         string heroFileName = "walk_attack2.png";
 
         List<Pickup> pickups = new List<Pickup>();
@@ -29,7 +27,7 @@ namespace GridDemos.Views.XAML
                 Source = ImageSource.FromFile(heroFileName),
                 ZIndex = 1,
             }, hero.Position.X, hero.Position.Y);
-            remIndex = gameGrid.Count - 1;
+            hero.remIndex = gameGrid.Count - 1;
 
             gameGrid.Add(new Image
             {
@@ -37,7 +35,7 @@ namespace GridDemos.Views.XAML
                 Source = ImageSource.FromFile("orc.png"),
                 ZIndex = 1,
             }, enemy.Position.X, enemy.Position.Y);
-            EnemyRemIndex = gameGrid.Count - 1;
+            enemy.remIndex = gameGrid.Count - 1;
 
             DrawMap();
             msg.Text = "";
@@ -177,9 +175,9 @@ namespace GridDemos.Views.XAML
 
         private void Remove()
         {
-            gameGrid.RemoveAt(remIndex);
-            if (EnemyRemIndex > remIndex) EnemyRemIndex -= 1;
-            gameGrid.RemoveAt(EnemyRemIndex);
+            gameGrid.RemoveAt(hero.remIndex);
+            if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
+            gameGrid.RemoveAt(enemy.remIndex);
         }
 
         public int CollideEnemy()
@@ -213,6 +211,7 @@ namespace GridDemos.Views.XAML
                 else
                 {
                     _ = Lose();
+                    hero.Position = new Vector2D(6, 5);
                 }
             }
             return result;
@@ -230,7 +229,7 @@ namespace GridDemos.Views.XAML
 
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
             
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{remIndex}";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{hero.remIndex}";
             //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
                 gameGrid.Add(new Image
                 {
@@ -240,7 +239,7 @@ namespace GridDemos.Views.XAML
                     //ClassId = "test",
                 }, hero.Position.X, hero.Position.Y);
 
-            remIndex = gameGrid.Count - 1;
+            hero.remIndex = gameGrid.Count - 1;
             //Image element = this.FindByName<Image>("test");
 
             enemy.Move();
@@ -255,7 +254,7 @@ namespace GridDemos.Views.XAML
                     //StyleId = "test",
                     //ClassId = "test",
                 }, enemy.Position.X, enemy.Position.Y);
-                EnemyRemIndex = gameGrid.Count - 1;
+                enemy.remIndex = gameGrid.Count - 1;
             }
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
@@ -332,6 +331,7 @@ namespace GridDemos.Views.XAML
     class Actor
     {
         public string Name { set; get; }
+        public int remIndex;
 
         Vector2D position;
         public Vector2D Position
