@@ -422,8 +422,8 @@ namespace GridDemos.Views.XAML
         private int strength;
         private Level lvl;
 
-        public Hero(string name, Vector2D position, Level lvl) : base(name, position)
         public int liv = 3;
+        public Hero(string name, Vector2D position, Level lvl) : base(name, position)
         //public Hero(string name, Vector2D position) : base(name, position)
         {
             Inventory = new List<Pickup>();
