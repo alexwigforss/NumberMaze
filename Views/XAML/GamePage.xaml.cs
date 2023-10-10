@@ -8,10 +8,14 @@ namespace GridDemos.Views.XAML
         string heroFileName = "walk_attack2.png";
 
         List<Pickup> pickups = new List<Pickup>();
+        List<Enemy> enemyList = new List<Enemy>();
 
         Level level;
         Hero hero;
         Enemy enemy;
+        Enemy enemy2;
+        Enemy enemy3;
+        Enemy enemy4;
 
         public GamePage()
         {
@@ -20,6 +24,14 @@ namespace GridDemos.Views.XAML
             level = new Level("Template");
             hero = new Hero("namnet", new Vector2D(6, 5), level);
             enemy = new Enemy("fiende", new Vector2D(3, 8), 1, 1, 1, level);
+            enemy2 = new Enemy("fiende2", new Vector2D(5, 1), 2, 1, 1, level);
+            //enemy3 = new Enemy("fiende3", new Vector2D(4, 1), 3, 1, 1, level);
+            //enemy4 = new Enemy("fiende4", new Vector2D(4, 1), 4, 1, 1, level);
+            enemyList.Add(enemy);
+            enemyList.Add(enemy2);
+            //enemyList.Add(enemy3);
+            //enemyList.Add(enemy4);
+            //enemyList.Add(new Enemy("fiende3", new Vector2D(4,1), 3, 1, 1));
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
@@ -28,13 +40,16 @@ namespace GridDemos.Views.XAML
             }, hero.Position.X, hero.Position.Y);
             hero.remIndex = gameGrid.Count - 1;
 
-            gameGrid.Add(new Image
+            foreach (Enemy e in enemyList)
             {
-                StyleId = "EnemyImage",
-                Source = ImageSource.FromFile("orc.png"),
-                ZIndex = 1,
-            }, enemy.Position.X, enemy.Position.Y);
-            enemy.remIndex = gameGrid.Count - 1;
+                gameGrid.Add(new Image
+                {
+                    StyleId = "EnemyImage",
+                    Source = ImageSource.FromFile("orc.png"),
+                    ZIndex = 1,
+                }, e.Position.X, e.Position.Y);
+                e.remIndex = gameGrid.Count - 1;
+            }
 
             DrawMap();
             msg.Text = "";
@@ -175,25 +190,38 @@ namespace GridDemos.Views.XAML
         private void Remove()
         {
             gameGrid.RemoveAt(hero.remIndex);
-            if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
+            //if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
             foreach (Pickup pick in pickups)
             {
                 if (pick.RemNum > hero.remIndex) pick.LowerIndex();
             }
-            gameGrid.RemoveAt(enemy.remIndex);
-            foreach (Pickup pick in pickups)
-            {
-                if (pick.RemNum > enemy.remIndex) pick.LowerIndex();
-            }
+            //gameGrid.RemoveAt(enemy.remIndex);
 
+            int lastremoved = gameGrid.Count;
+            foreach (Enemy e in enemyList)
+            {
+                if (e.remIndex > hero.remIndex) e.remIndex -= 1;
+                if (e.remIndex > lastremoved) e.remIndex -= 1;
+                gameGrid.RemoveAt(e.remIndex);
+                lastremoved = e.remIndex;
+                foreach (Pickup pick in pickups)
+                {
+                    if (pick.RemNum > e.remIndex) pick.LowerIndex();
+                }
+            }
         }
 
-        public int CollideEnemy()
+       
+
+        private int CollideEnemy()
         {
             int result = 0;
-            if (hero.Position.X == enemy.Position.X && hero.Position.Y == enemy.Position.Y)
+            foreach (Enemy e in enemyList)
             {
-                result = enemy.Id;
+                if (hero.Position.X == e.Position.X && hero.Position.Y == e.Position.Y)
+                {
+                    result = e.Id;
+                }
             }
             return result;
         }
@@ -204,22 +232,28 @@ namespace GridDemos.Views.XAML
         private int strid(int enemyid)
         {
             int result = 1;
-            if (hero.Strength >= enemy.Strength)
+            foreach (Enemy e in enemyList)
             {
-                enemy.dead = true;
-            }
-            else
-            {
-                hero.liv -= 1;
-                heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
-                if (hero.liv < 0)
+                if (e.Id == enemyid)
                 {
-                    _ = gameoverAsync();
-                }
-                else
-                {
-                    _ = Lose();
-                    hero.Position = new Vector2D(6, 5);
+                    if (hero.Strength >= e.Strength)
+                    {
+                        e.dead = true;
+                    }
+                    else
+                    {
+                        hero.liv -= 1;
+                        heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
+                        if (hero.liv < 0)
+                        {
+                            _ = gameoverAsync();
+                        }
+                        else
+                        {
+                            _ = Lose();
+                            hero.Position = new Vector2D(6, 5);
+                        }
+                    }
                 }
             }
             return result;
@@ -249,20 +283,23 @@ namespace GridDemos.Views.XAML
 
             hero.remIndex = gameGrid.Count - 1;
             //Image element = this.FindByName<Image>("test");
-
-            enemy.Move();
-            if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
-
-            if (!enemy.dead)
+            foreach (Enemy e in enemyList)
             {
-                gameGrid.Add(new Image
+                if (!e.dead)
                 {
-                    Source = ImageSource.FromFile("orc.png"),
-                    ZIndex = 1,
-                    //StyleId = "test",
-                    //ClassId = "test",
-                }, enemy.Position.X, enemy.Position.Y);
-                enemy.remIndex = gameGrid.Count - 1;
+                    e.Move();
+                    if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
+
+
+                    gameGrid.Add(new Image
+                    {
+                        Source = ImageSource.FromFile("orc.png"),
+                        ZIndex = 1,
+                        //StyleId = "test",
+                        //ClassId = "test",
+                    }, e.Position.X, e.Position.Y);
+                    e.remIndex = gameGrid.Count - 1;
+                }
             }
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
@@ -390,7 +427,7 @@ namespace GridDemos.Views.XAML
                 }
                 return -1;
             }
-            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ')
+            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ' )
             {
                 if (char.IsNumber(level.BpArray[position.Y - 1, position.X]))
                 {
