@@ -15,8 +15,6 @@ namespace GridDemos.Views.XAML
         Enemy enemy = new Enemy("fiende", new Vector2D(3,8), 1, 1, 1);
         Enemy enemy2 = new Enemy("fiende2", new Vector2D(5, 1), 2, 1, 1);
 
-        // Hero hero = new Hero("namnet", new Vector2D(6, 5));
-
         public GamePage()
         {
             enemyList.Add(enemy);
@@ -26,6 +24,7 @@ namespace GridDemos.Views.XAML
             InitializeComponent();
             level = new Level("Template");
             hero = new Hero("namnet", new Vector2D(6, 5), level);
+            enemy = new Enemy("fiende", new Vector2D(3, 8), 1, 1, 1, level);
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
@@ -174,7 +173,7 @@ namespace GridDemos.Views.XAML
                             VerticalTextAlignment = TextAlignment.Center,
 							ZIndex = 1,
 						}, i, j);
-                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count - 1));
+                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count-1));
 					}
 				}
             }
@@ -184,6 +183,16 @@ namespace GridDemos.Views.XAML
         private void Remove()
         {
             gameGrid.RemoveAt(hero.remIndex);
+            if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
+            foreach (Pickup pick in pickups)
+            {
+                if (pick.RemNum > hero.remIndex) pick.LowerIndex();
+            }
+            gameGrid.RemoveAt(enemy.remIndex);
+            foreach (Pickup pick in pickups)
+            {
+                if (pick.RemNum > enemy.remIndex) pick.LowerIndex();
+            }
             int lastremoved = gameGrid.Count;
             foreach (Enemy e in enemyList)
             {
@@ -192,6 +201,8 @@ namespace GridDemos.Views.XAML
                 gameGrid.RemoveAt(e.remIndex);
                 lastremoved = e.remIndex;
             }
+        }
+
         }
 
         public int CollideEnemy()
@@ -329,13 +340,16 @@ namespace GridDemos.Views.XAML
         }
         public void RemoveNumByPos(Vector2D plpos)
         {
-            int lastRemoved = 0;
+            //int lastRemoved = 0;
             foreach (Pickup p in pickups)
             {
-                if ((p.Vector.X == plpos.X) && (p.Vector.Y == plpos.Y - 1))
+                if ((p.Vector.X == plpos.X) && (p.Vector.Y == plpos.Y))
                 {
-                    gameGrid.RemoveAt(p.RemNum - 1);
-                    lastRemoved = p.RemNum;
+                    gameGrid.RemoveAt(p.RemNum);
+                    foreach (Pickup pick in pickups)
+                    {
+                        if (pick.RemNum > p.RemNum) pick.LowerIndex();
+                    }
                     return;
                 }
             }
@@ -442,11 +456,11 @@ namespace GridDemos.Views.XAML
     {
         public List<Pickup> Inventory { set; get; }
         public int Strength { get => strength; set => strength = value; }
+        private Level lvl;
         internal Level Lvl { get => lvl; set => lvl = value; }
 
         static int preDir = 2;
         private int strength;
-        private Level lvl;
 
         public int liv = 3;
         public Hero(string name, Vector2D position, Level lvl) : base(name, position)
@@ -530,41 +544,44 @@ namespace GridDemos.Views.XAML
         public int Behaviour { set; get; }
         public int direction;
         public bool dead = false;
+        private Level lvl;
+        internal Level Lvl { get => lvl; set => lvl = value; }
 
         public Enum Behaviours;
 
-        public Enemy(string name, Vector2D vector, int id, int str, int behaviour) : base(name, vector)
+        public Enemy(string name, Vector2D vector, int id, int str, int behaviour, Level lvl) : base(name, vector)
         {
             Id = id;
             Strength = str;
             Behaviour = behaviour;
+            Lvl = lvl;
         }
 
         public void RemoveSelf() { }
 
         public void CollideOther() { }
 
-        public void Move()
+        public override void Move()
         {
             Random rnd = new Random();
             direction = rnd.Next(0,4);
             //Up
-            if (direction == 0 && Position.X > 0 && !CollideWall(Position, new Level("test"), 0))
+            if (direction == 0 && Position.X > 0 && !CollideWall(Position, lvl, 0))
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
             //Up
-            else if (direction == 1 && Position.Y > 0 && !CollideWall(Position, new Level("test"), 1))
+            else if (direction == 1 && Position.Y > 0 && !CollideWall(Position, lvl, 1))
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
             //Down
-            else if (direction == 2 && Position.Y < 9 && !CollideWall(Position, new Level("test"), 2))
+            else if (direction == 2 && Position.Y < 9 && !CollideWall(Position, lvl, 2))
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
             //Right
-            else if (direction == 3 && Position.X < 9 && !CollideWall(Position, new Level("test"), 3))
+            else if (direction == 3 && Position.X < 9 && !CollideWall(Position, lvl, 3))
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
@@ -583,13 +600,22 @@ namespace GridDemos.Views.XAML
             Vector = vector;
         }
 
+        /// <summary>
+        /// PICKUP
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="vector"></param>
+        /// <param name="remNum"></param>
         public Pickup(int value, Vector2D vector, int remNum)
         {
             Value = value;
             Vector = vector;
             RemNum = remNum;
         }
-
+        public void LowerIndex()
+        {
+            RemNum--;
+        }
         public string Name { get; }
     }
 
