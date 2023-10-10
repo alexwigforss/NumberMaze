@@ -21,6 +21,8 @@ namespace GridDemos.Views.XAML
         {
             nrOfRemNr = 0;
             InitializeComponent();
+            btnup.HeightRequest = 58;
+            btndown.HeightRequest = 58;
             level = new Level("Template");
             hero = new Hero("namnet", new Vector2D(6, 5), level);
             enemy = new Enemy("fiende", new Vector2D(3, 8), 1, 1, 1, level);

@@ -29,11 +29,6 @@
                HorizontalOptions="Center"
                VerticalOptions="Center"/>
 
-        <!--<GraphicsView
-            HorizontalOptions="Fill"
-            Drawable="{StaticResource drawable}"
-            WidthRequest="400"
-            HeightRequest="400" />-->
         
         <Grid x:Name="gameGrid" Grid.Row="1">
             <!-- Define your grid rows and columns here -->
@@ -75,11 +70,7 @@
             HeightRequest="400" />
 
         <BoxView Grid.Row="2"
-                 Color="Red" />
-        <Label Grid.Row="2"
-               Text="Buttons AND/OR Pickups"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
+                 Color="DarkGrey" />
         <!-- Buttons -->
         <HorizontalStackLayout Grid.Row="2">
 
@@ -89,25 +80,23 @@
                     WidthRequest="100"
                     Clicked="Button_Left_Clicked"
                     />
-            <VerticalStackLayout>
+            <VerticalStackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
                 <Button Text="UP"
                     x:Name="btnup"
                     WidthRequest="200"
-                    MinimumHeightRequest="53"
-                    HorizontalOptions="Fill"
                     Clicked="Button_Up_Clicked"
+                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                     />
                 <Button Text="DOWN" 
-                    MinimumHeightRequest="53"
                     x:Name="btndown"
                     Clicked="Button_Down_Clicked"
+                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                     />
             </VerticalStackLayout>
             <Button Text="RIGHT" 
                     WidthRequest="100"
                     Clicked="Button_Right_Clicked"
                     />
-
         </HorizontalStackLayout>
     </Grid>
 </ContentPage>
