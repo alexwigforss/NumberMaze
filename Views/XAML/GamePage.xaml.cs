@@ -213,6 +213,7 @@ namespace GridDemos.Views.XAML
                 else
                 {
                     _ = Lose();
+                    hero.Position = new Vector2D(6, 5);
                 }
             }
             return result;
