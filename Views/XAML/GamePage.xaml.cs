@@ -200,13 +200,16 @@ namespace GridDemos.Views.XAML
             int lastremoved = gameGrid.Count;
             foreach (Enemy e in enemyList)
             {
-                if (e.remIndex > hero.remIndex) e.remIndex -= 1;
-                if (e.remIndex > lastremoved) e.remIndex -= 1;
-                gameGrid.RemoveAt(e.remIndex);
-                lastremoved = e.remIndex;
-                foreach (Pickup pick in pickups)
+                if (!e.dead)
                 {
-                    if (pick.RemNum > e.remIndex) pick.LowerIndex();
+                    if (e.remIndex > hero.remIndex) e.remIndex -= 1;
+                    if (e.remIndex > lastremoved) e.remIndex -= 1;
+                    gameGrid.RemoveAt(e.remIndex);
+                    lastremoved = e.remIndex;
+                    foreach (Pickup pick in pickups)
+                    {
+                        if (pick.RemNum > e.remIndex) pick.LowerIndex();
+                    }
                 }
             }
         }
@@ -239,6 +242,15 @@ namespace GridDemos.Views.XAML
                     if (hero.Strength >= e.Strength)
                     {
                         e.dead = true;
+                        {
+                            gameGrid.Add(new Image
+                            {
+                                Source = ImageSource.FromFile("tombstone.png"),
+                                ZIndex = 0,
+                                //StyleId = "test",
+                                //ClassId = "test",
+                            }, e.Position.X, e.Position.Y);
+                        }
                     }
                     else
                     {
@@ -300,6 +312,7 @@ namespace GridDemos.Views.XAML
                     }, e.Position.X, e.Position.Y);
                     e.remIndex = gameGrid.Count - 1;
                 }
+
             }
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
