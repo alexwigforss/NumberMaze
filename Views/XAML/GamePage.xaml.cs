@@ -24,9 +24,9 @@ namespace GridDemos.Views.XAML
             btnup.HeightRequest = 58;
             btndown.HeightRequest = 58;
             level = new Level("Template");
-            hero = new Hero("namnet", new Vector2D(6, 5), level);
-            enemy = new Enemy("fiende", new Vector2D(3, 8), 1, 5, 1, level);
-            enemy2 = new Enemy("fiende2", new Vector2D(5, 1), 2, 10, 1, level);
+            hero = new Hero("namnet", new Vector2D(0, 0), level);
+            enemy = new Enemy("fiende", new Vector2D(0, 9), 1, 5, 1, level);
+            enemy2 = new Enemy("fiende2", new Vector2D(9, 9), 2, 10, 1, level);
             //enemy3 = new Enemy("fiende3", new Vector2D(4, 1), 3, 1, 1, level);
             //enemy4 = new Enemy("fiende4", new Vector2D(4, 1), 4, 1, 1, level);
             enemyList.Add(enemy);
@@ -686,16 +686,28 @@ namespace GridDemos.Views.XAML
             Name = name;
             bpLines = new string[]
             {
-            "T bTFFSFFT",
-            "t    2 11T",
-            "t  TTRW11F",
-            "T  TSTW11T",
-            "F  T     F",
-            "T       TS",
-            "T TR    FT",
-            "F FTW  TFF",
-            "T   W  bTS",
-            "bbTbSSTSST"};
+            "   1TbTT2S",
+            " TF      S",
+            " Tb WTbT T",
+            "1  1   T  ",
+            "T b  T2F  ",
+            "F SW TbT  ",
+            "F  T      ",
+            "T     TbT ",
+            "F STb T4W ",
+            "  T2      "};
+            //bpLines = new string[]
+            //{
+            //"T bTFFSFFT",
+            //"t    2 11T",
+            //"t  TTRW11F",
+            //"T  TSTW11T",
+            //"F  T     F",
+            //"T       TS",
+            //"T TR    FT",
+            //"F FTW  TFF",
+            //"T   W  bTS",
+            //"bbTbSSTSST"};
             bpArray = StringArrToCharArr(bpLines);
             Difficulty = 0;
         }
