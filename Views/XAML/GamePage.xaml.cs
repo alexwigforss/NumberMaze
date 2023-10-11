@@ -287,7 +287,8 @@ namespace GridDemos.Views.XAML
 
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
             
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{hero.remIndex}";
+            heropos.Text = $"{hero.Strength}";
+            //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{hero.remIndex}";
             //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
                 gameGrid.Add(new Image
                 {
