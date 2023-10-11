@@ -177,7 +177,7 @@ namespace GridDemos.Views.XAML
 					{
 						gameGrid.Add(new Label
 						{
-							Text = level.BpArray[j, i].ToString() + "\n" + (gameGrid.Count - 1),
+							Text = level.BpArray[j, i].ToString(),
                             HorizontalTextAlignment = TextAlignment.Center,
                             VerticalTextAlignment = TextAlignment.Center,
 							ZIndex = 1,
@@ -294,6 +294,7 @@ namespace GridDemos.Views.XAML
                     //StyleId = "test",
                     //ClassId = "test",
                 }, hero.Position.X, hero.Position.Y);
+
 
             hero.remIndex = gameGrid.Count - 1;
             //Image element = this.FindByName<Image>("test");

@@ -68,7 +68,7 @@
             Drawable="{StaticResource drawable}"
             WidthRequest="400"
             HeightRequest="400" />
-
+  
         <BoxView Grid.Row="2"
                  Color="DarkGrey" />
         <!-- Buttons -->
