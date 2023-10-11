@@ -277,7 +277,7 @@ namespace GridDemos.Views.XAML
 
         private void Doit(int dir = -1)
         {
-            int stridres = 0;
+            int stridres;
 
             if ((dir == 0)&&(heroFileName == "walk_attack2.png"))
                 heroFileName = "walk_attack2left.png";
@@ -364,6 +364,7 @@ namespace GridDemos.Views.XAML
             }
             Doit(3);
         }
+
         public void RemoveNumByPos(Vector2D plpos)
         {
             //int lastRemoved = 0;
@@ -379,6 +380,11 @@ namespace GridDemos.Views.XAML
                     return;
                 }
             }
+        }
+
+        private void btndown_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 
@@ -436,43 +442,59 @@ namespace GridDemos.Views.XAML
         }
         public int CollideWallOrNum(Vector2D position, Level level, int direction)
         {
-            if (direction == 0 && level.BpArray[position.Y, position.X - 1] != ' ')
+            try
             {
-                if (char.IsNumber(level.BpArray[position.Y, position.X - 1]))
+                if (direction == 0 && level.BpArray[position.Y, position.X - 1] != ' ')
                 {
-                    int slask = level.BpArray[position.Y, position.X - 1];
-                    return slask - 48;
+                    if (char.IsNumber(level.BpArray[position.Y, position.X - 1]))
+                    {
+                        int slask = level.BpArray[position.Y, position.X - 1];
+                        return slask - 48;
+                    }
+                    return -1;
                 }
-                return -1;
+                if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ')
+                {
+                    if (char.IsNumber(level.BpArray[position.Y - 1, position.X]))
+                    {
+                        int slask = level.BpArray[position.Y - 1, position.X];
+                        return slask - 48;
+                    }
+                    return -1;
+                }
+                if (direction == 2 && level.BpArray[position.Y + 1, position.X] != ' ')
+                {
+                    if (char.IsNumber(level.BpArray[position.Y + 1, position.X]))
+                    {
+                        int slask = level.BpArray[position.Y + 1, position.X];
+                        return slask - 48;
+                    }
+                    return -1;
+                }
+                if (direction == 3 && level.BpArray[position.Y, position.X + 1] != ' ')
+                {
+                    if (char.IsNumber(level.BpArray[position.Y, position.X + 1]))
+                    {
+                        int slask = level.BpArray[position.Y, position.X + 1];
+                        return slask - 48;
+                    }
+                    return -1;
+                }
+                return 0;
             }
-            if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ' )
+            catch (Exception)
             {
-                if (char.IsNumber(level.BpArray[position.Y - 1, position.X]))
+                if (direction == 0 && level.BpArray[position.Y, position.X] != ' ')
                 {
-                    int slask = level.BpArray[position.Y - 1, position.X];
-                    return slask - 48;
+                    if (char.IsNumber(level.BpArray[position.Y, position.X]))
+                    {
+                        int slask = level.BpArray[position.Y, position.X];
+                        return slask - 48;
+                    }
+                    return -1;
                 }
-                return -1;
+                return 0;
             }
-            if (direction == 2 && level.BpArray[position.Y + 1,position.X] != ' ')
-            {
-                if (char.IsNumber(level.BpArray[position.Y + 1, position.X]))
-                {
-                    int slask = level.BpArray[position.Y + 1, position.X];
-                    return slask - 48;
-                }
-                return -1;
-            }
-            if (direction == 3 && level.BpArray[position.Y,position.X + 1] != ' ')
-            {
-                if (char.IsNumber(level.BpArray[position.Y, position.X + 1]))
-                {
-                    int slask = level.BpArray[position.Y, position.X + 1];
-                    return slask - 48;
-                }
-                return -1;
-            }
-            return 0;
         }
 
 
