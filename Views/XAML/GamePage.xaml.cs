@@ -6,7 +6,7 @@ namespace GridDemos.Views.XAML
     {
         int nrOfRemNr;
         string heroFileName = "walk_attack2.png";
-
+        Vector2D playerStartPos = new Vector2D(0, 0);
         List<Pickup> pickups = new List<Pickup>();
         List<Enemy> enemyList = new List<Enemy>();
 
@@ -24,7 +24,7 @@ namespace GridDemos.Views.XAML
             btnup.HeightRequest = 58;
             btndown.HeightRequest = 58;
             level = new Level("Template");
-            hero = new Hero("namnet", new Vector2D(0, 0), level);
+            hero = new Hero("namnet", playerStartPos, level);
             enemy = new Enemy("fiende", new Vector2D(0, 9), 1, 5, 1, level);
             enemy2 = new Enemy("fiende2", new Vector2D(9, 9), 2, 10, 1, level);
             //enemy3 = new Enemy("fiende3", new Vector2D(4, 1), 3, 1, 1, level);
@@ -267,7 +267,7 @@ namespace GridDemos.Views.XAML
                         else
                         {
                             _ = Lose();
-                            hero.Position = new Vector2D(6, 5);
+                            hero.Position = playerStartPos;
                         }
                     }
                 }
