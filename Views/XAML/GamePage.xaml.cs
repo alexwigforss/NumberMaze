@@ -9,7 +9,7 @@ namespace GridDemos.Views.XAML
         Vector2D playerStartPos = new Vector2D(0, 0);
         List<Pickup> pickups = new List<Pickup>();
         List<Enemy> enemyList = new List<Enemy>();
-
+        bool hasPressedQuit;
         Level level;
         Hero hero;
         Enemy enemy;
@@ -19,6 +19,7 @@ namespace GridDemos.Views.XAML
 
         public GamePage()
         {
+            hasPressedQuit = false;
             nrOfRemNr = 0;
             InitializeComponent();
             btnup.HeightRequest = 58;
@@ -264,10 +265,11 @@ namespace GridDemos.Views.XAML
                     else
                     {
                         hero.liv -= 1;
-                        heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
-                        if (hero.liv < 0)
+                        heropos.Text = $"Strength:{hero.Strength}, Lives:{hero.liv}";
+                        if (hero.liv < 0 && !hasPressedQuit)
                         {
                             _ = gameoverAsync();
+                            hasPressedQuit = true;
                         }
                         else
                         {
@@ -288,9 +290,13 @@ namespace GridDemos.Views.XAML
                 heroFileName = "walk_attack2left.png";
             else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
                 heroFileName = "walk_attack2.png";
-
-
-            if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
+            // QF
+            //bool harkrigat = false;
+            if (CollideEnemy() != 0)
+            {
+                stridres = strid(CollideEnemy());
+                //harkrigat = true;
+            }
             
             heropos.Text = $"{hero.Strength}";
             //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{hero.remIndex}";
@@ -307,8 +313,11 @@ namespace GridDemos.Views.XAML
             {
                 if (!e.dead)
                 {
+                    //if (!harkrigat)
                     e.Move();
-                    if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
+                    // QF
+                    if (CollideEnemy() != 0)
+                        stridres = strid(CollideEnemy());
                     string enemyFileName = "";
                     if (e.Strength < 6)
                         enemyFileName = "orc.png";
