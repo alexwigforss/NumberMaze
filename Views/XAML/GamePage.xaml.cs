@@ -228,10 +228,14 @@ namespace GridDemos.Views.XAML
             int result = 0;
             foreach (Enemy e in enemyList)
             {
-                if (hero.Position.X == e.Position.X && hero.Position.Y == e.Position.Y && !e.dead)
+                if (hero.Position.X == e.Position.X && hero.Position.Y == e.Position.Y && !e.dead )
                 {
                     result = e.Id;
                 }
+                //else if (hero.oldPosition.X == e.Position.X && hero.oldPosition.Y == e.Position.Y && !e.dead)
+                //{
+                //    result = e.Id;
+                //}
             }
             return result;
         }
@@ -288,6 +292,11 @@ namespace GridDemos.Views.XAML
             else if ((dir == 3)&&(heroFileName == "walk_attack2left.png"))
                 heroFileName = "walk_attack2.png";
 
+            foreach(Enemy e in enemyList)
+            {
+                e.Move();
+            }
+
 
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
             
@@ -308,8 +317,8 @@ namespace GridDemos.Views.XAML
             {
                 if (!e.dead)
                 {
-                    e.Move();
-                    if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
+                    //e.Move();
+                    //if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
                     if (!e.dead)
                     {
                         gameGrid.Add(new Image
@@ -321,16 +330,16 @@ namespace GridDemos.Views.XAML
                         }, e.Position.X, e.Position.Y);
                         e.remIndex = gameGrid.Count - 1;
                     }
-                    else if (stridres != 0)
-                    {
-                        gameGrid.Add(new Image
-                        {
-                            Source = ImageSource.FromFile("tombstone.png"),
-                            ZIndex = 0,
-                            //StyleId = "test",
-                            //ClassId = "test",
-                        }, e.Position.X, e.Position.Y);
-                    }
+                    //else if (stridres != 0)
+                    //{
+                    //    gameGrid.Add(new Image
+                    //    {
+                    //        Source = ImageSource.FromFile("tombstone.png"),
+                    //        ZIndex = 0,
+                    //        //StyleId = "test",
+                    //        //ClassId = "test",
+                    //    }, e.Position.X, e.Position.Y);
+                    //}
                 }
 
             }
@@ -419,6 +428,7 @@ namespace GridDemos.Views.XAML
     {
         public string Name { set; get; }
         public int remIndex;
+        public Vector2D oldPosition;
 
         Vector2D position;
         public Vector2D Position
@@ -528,6 +538,7 @@ namespace GridDemos.Views.XAML
             wNum = false;
             //FIXME Ge actor tillgång till level och byt ut new level till lvl
             //Left
+            oldPosition = Position;
             if (direction == 0 && Position.X > 0 && CollideWallOrNum(Position, lvl, 0) == 0)
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
