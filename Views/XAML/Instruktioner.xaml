@@ -23,10 +23,8 @@
                FontAttributes="Bold"
         />
 
-        <Label Text="In each map the player will control a hero character. 
-The goal is to increase your heros strength by picking up numbers on the map. 
-The number will be added to your heros strength. Be careful of the enemies that are on the lookout for you.
-Defeat them when you have gained enough strength. You win by defeating all enemies."
+        <Label
+            Text="In each map the player will control a hero character. The goal is to increase your heros strength by picking up numbers on the map. The number will be added to your heros strength. Be careful of the enemies that are on the lookout for you. Defeat them when you have gained enough strength. You win by defeating all enemies."
         />
 
         <Label Text=" "/>
@@ -35,6 +33,16 @@ Defeat them when you have gained enough strength. You win by defeating all enemi
                FontAttributes="Bold"/>
         
         <Label Text="Use the arrow buttons at the bottom to move the hero in different directions." />
+
+        <Label Text=" "/>
+        <Image Source="orc.png"
+               HeightRequest="50"
+               />
+        <Label Text="The green orc have a strength of 5"/>
+        <Image Source="red_orc.png"
+               HeightRequest="50"
+               />
+        <Label Text="The red orc have a strength of 10"/>
 
     </VerticalStackLayout>
 </ContentPage>
