@@ -22,7 +22,7 @@
                VerticalOptions="Center" />
 
         <BoxView Grid.Row="1"
-                 Color="#684A18" />
+                 Color="#D17528" />
         
         <Label x:Name="heropos"
                Text=".."
