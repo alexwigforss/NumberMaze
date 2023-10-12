@@ -271,7 +271,7 @@ namespace GridDemos.Views.XAML
                             _ = gameoverAsync();
                             hasPressedQuit = true;
                         }
-                        else
+                        else if(!hasPressedQuit)
                         {
                             _ = Lose();
                             hero.Position = playerStartPos;
