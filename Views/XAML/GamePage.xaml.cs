@@ -22,7 +22,7 @@ namespace GridDemos.Views.XAML
             btndown.HeightRequest = 58;
             level = new Level("Template");
             hero = new Hero("namnet", playerStartPos, level);
-            // CHANGE ändrat så id tilldelas automatiskt stegrande
+            // CHANGE ändrat så id tilldelas automatiskt stegrande i konstruktören
             enemyList.Add(new Enemy("fiende", new Vector2D(0, 9), 5, 1, level));
             enemyList.Add(new Enemy("fiende2", new Vector2D(8, 0), 5, 1, level));
             enemyList.Add(new Enemy("fiende3", new Vector2D(9, 3), 5, 1, level));
@@ -74,7 +74,15 @@ namespace GridDemos.Views.XAML
             }
             else System.Environment.Exit(0);
         }
-
+        private async Task LevelCleared()
+        {
+            bool answer = await DisplayAlert("Congratulations", "You cleared the map\n In this demo we got only one level\n Stay tuned for more levels\n Would you like to go back to the menu?", "Yes", "Quit");
+            if (answer)
+            {
+                await Navigation.PopAsync();
+            }
+            else System.Environment.Exit(0);
+        }
         private bool DrawMap()
         {
             for (int i = 0; i <= level.BpArray.GetUpperBound(0); i++)
@@ -331,10 +339,18 @@ namespace GridDemos.Views.XAML
                 }
 
             }
+            bool allisdead = true;
+            foreach (Enemy e in enemyList)
+            {
+                if(!e.dead)
+                    allisdead = false;
+            }
+            if (allisdead)
+                _ = LevelCleared();
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
         {
-            bool wasNum = false;
+            bool wasNum;
             Remove();
             hero.Move(0,out wasNum);
             if (wasNum)
@@ -345,7 +361,7 @@ namespace GridDemos.Views.XAML
         }
         private void Button_Up_Clicked(object sender, EventArgs e)
         {
-            bool wasNum = false;
+            bool wasNum;
             Remove();
             hero.Move(1, out wasNum);
             if (wasNum)
@@ -356,7 +372,7 @@ namespace GridDemos.Views.XAML
         }
         private void Button_Down_Clicked(object sender, EventArgs e)
         {
-            bool wasNum = false;
+            bool wasNum;
             Remove();
             hero.Move(2, out wasNum);
             if (wasNum)
@@ -368,7 +384,7 @@ namespace GridDemos.Views.XAML
         }
         private void Button_Right_Clicked(object sender, EventArgs e)
         {
-            bool wasNum = false;
+            bool wasNum;
             Remove();
             hero.Move(3, out wasNum);
             if (wasNum)
