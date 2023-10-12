@@ -206,13 +206,10 @@ namespace GridDemos.Views.XAML
         private void Remove()
         {
             gameGrid.RemoveAt(hero.remIndex);
-            //if (enemy.remIndex > hero.remIndex) enemy.remIndex -= 1;
             foreach (Pickup pick in pickups)
             {
                 if (pick.RemNum > hero.remIndex) pick.LowerIndex();
             }
-            //gameGrid.RemoveAt(enemy.remIndex);
-
 
             int lastremoved = gameGrid.Count;
             foreach (Enemy e in enemyList)
@@ -246,10 +243,6 @@ namespace GridDemos.Views.XAML
                 {
                     result = e.Id;
                 }
-                //else if (hero.oldPosition.X == e.Position.X && hero.oldPosition.Y == e.Position.Y && !e.dead)
-                //{
-                //    result = e.Id;
-                //}
             }
             return result;
         }
@@ -266,15 +259,12 @@ namespace GridDemos.Views.XAML
                 {
                     if (hero.Strength >= e.Strength)
                     {
-                        //Remove();
                         e.dead = true;
                         {
                             gameGrid.Add(new Image
                             {
                                 Source = ImageSource.FromFile("tombstone.png"),
                                 ZIndex = 0,
-                                //StyleId = "test",
-                                //ClassId = "test",
                             }, e.Position.X, e.Position.Y);
                         }
                     }
@@ -508,8 +498,6 @@ namespace GridDemos.Views.XAML
             }
             return 0;
         }
-
-
     }
 
     class Hero : Actor
@@ -524,7 +512,6 @@ namespace GridDemos.Views.XAML
 
         public int liv = 3;
         public Hero(string name, Vector2D position, Level lvl) : base(name, position)
-        //public Hero(string name, Vector2D position) : base(name, position)
         {
             Inventory = new List<Pickup>();
             Strength = 0;
@@ -539,7 +526,6 @@ namespace GridDemos.Views.XAML
         public int Move(int direction, out bool wNum)
         {
             wNum = false;
-            //FIXME Ge actor tillgång till level och byt ut new level till lvl
             //Left
             oldPosition = Position;
             if (direction == 0 && Position.X > 0 && CollideWallOrNum(Position, lvl, 0) == 0)
@@ -590,7 +576,6 @@ namespace GridDemos.Views.XAML
                 wNum = true;
             }
             return direction;
-            //preDir = direction;
         }
 
         public void CollideEnemy() 
@@ -681,15 +666,6 @@ namespace GridDemos.Views.XAML
         public string Name { get; }
     }
 
-    //class Number : Pickup
-    //{
-    //    public Number(int value, Vector2D vector) : base(remNum)
-    //    {
-    //        Value = value;
-    //    }
-
-    //}
-
     class Operator : Pickup
     {
         public char[] Signs { set; get; }
@@ -704,7 +680,6 @@ namespace GridDemos.Views.XAML
     class Level
     {
         string blueprint;
-        //List<string> bpLines = new List<string>();
         string[] bpLines;
         char[,] bpArray;
         public string Name { set; get; }
@@ -715,7 +690,6 @@ namespace GridDemos.Views.XAML
         public static int Width { set; get; }
         public static int Height { set; get; }
 
-        //public Level(string name, string blueprint, int difficulty, int width, int height)
         public Level(string name)
         {
             Width = 10;
@@ -733,18 +707,6 @@ namespace GridDemos.Views.XAML
             "T     TbT ",
             "F STb T4W ",
             "  T2      "};
-            //bpLines = new string[]
-            //{
-            //"T bTFFSFFT",
-            //"t    2 11T",
-            //"t  TTRW11F",
-            //"T  TSTW11T",
-            //"F  T     F",
-            //"T       TS",
-            //"T TR    FT",
-            //"F FTW  TFF",
-            //"T   W  bTS",
-            //"bbTbSSTSST"};
             bpArray = StringArrToCharArr(bpLines);
             Difficulty = 0;
         }
@@ -770,7 +732,6 @@ namespace GridDemos.Views.XAML
                 }
                 if (i < chararr.GetUpperBound(0)) { }
             }
-
             return chararr;
         }
 
@@ -786,9 +747,7 @@ namespace GridDemos.Views.XAML
                 }
                 if (i < chararr.GetUpperBound(0)) landstring += "\n";
             }
-
             return landstring;
         }
-
     }
 }
