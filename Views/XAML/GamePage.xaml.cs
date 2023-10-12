@@ -26,7 +26,7 @@ namespace GridDemos.Views.XAML
             enemyList.Add(new Enemy("fiende", new Vector2D(0, 9), 5, 1, level));
             enemyList.Add(new Enemy("fiende2", new Vector2D(8, 0), 5, 1, level));
             enemyList.Add(new Enemy("fiende3", new Vector2D(9, 3), 5, 1, level));
-            enemyList.Add(new Enemy("fiende4", new Vector2D(9, 9), 5, 1, level));
+            enemyList.Add(new Enemy("fiende4", new Vector2D(9, 9), 10, 1, level));
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
@@ -37,10 +37,12 @@ namespace GridDemos.Views.XAML
 
             foreach (Enemy e in enemyList)
             {
+                string enemyFileName = ChoseEnemyImage(e);
+
                 gameGrid.Add(new Image
                 {
                     StyleId = "EnemyImage",
-                    Source = ImageSource.FromFile("orc.png"),
+                    Source = ImageSource.FromFile(enemyFileName),
                     ZIndex = 1,
                 }, e.Position.X, e.Position.Y);
                 e.remIndex = gameGrid.Count - 1;
@@ -50,6 +52,17 @@ namespace GridDemos.Views.XAML
             msg.Text = "";
 
             heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
+        }
+
+        private static string ChoseEnemyImage(Enemy e)
+        {
+            string enemyFileName = "orc.png";
+
+            if (e.Strength < 6)
+                enemyFileName = "orc.png";
+            else if (e.Strength >= 6)
+                enemyFileName = "red_orc.png";
+            return enemyFileName;
         }
 
         private async Task gameoverAsync()
@@ -306,9 +319,11 @@ namespace GridDemos.Views.XAML
                 {
                     if (!e.dead)
                     {
+                        string enemyFileName = ChoseEnemyImage(e);
+
                         gameGrid.Add(new Image
                         {
-                            Source = ImageSource.FromFile("orc.png"),
+                            Source = ImageSource.FromFile(enemyFileName),
                             ZIndex = 1,
                         }, e.Position.X, e.Position.Y);
                         e.remIndex = gameGrid.Count - 1;
