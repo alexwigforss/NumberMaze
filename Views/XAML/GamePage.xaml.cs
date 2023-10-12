@@ -61,6 +61,7 @@ namespace GridDemos.Views.XAML
             DrawMap();
             msg.Text = "";
             heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}, Lives:{hero.liv}";
+            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}, Lives:{hero.liv}";
         }
 
         private async Task gameoverAsync()
@@ -238,6 +239,10 @@ namespace GridDemos.Views.XAML
         {
             await DisplayAlert("Fight", "You Lost the fight", "OK");
         }
+        private async Task LevelCleared()
+        {
+            await DisplayAlert("Congratulations", "You cleared the map\n In this demo we got only one map\n Stay tuned", "OK");
+        }
         private int strid(int enemyid)
         {
             int result = 1;
@@ -317,7 +322,11 @@ namespace GridDemos.Views.XAML
                     }, e.Position.X, e.Position.Y);
                     e.remIndex = gameGrid.Count - 1;
                 }
-
+            }
+            // FIXME replace with list when list is implemented
+            if (enemy.dead && enemy2.dead)
+            {
+                _ = LevelCleared();
             }
         }
         private void Button_Left_Clicked(object sender, EventArgs e)
@@ -380,11 +389,6 @@ namespace GridDemos.Views.XAML
                     return;
                 }
             }
-        }
-
-        private void btndown_Clicked(object sender, EventArgs e)
-        {
-
         }
     }
 
