@@ -6,16 +6,13 @@ namespace GridDemos.Views.XAML
     {
         int nrOfRemNr;
         string heroFileName = "walk_attack2.png";
+        Vector2D playerStartPos = new Vector2D(0, 0);
 
         List<Pickup> pickups = new List<Pickup>();
         List<Enemy> enemyList = new List<Enemy>();
 
         Level level;
         Hero hero;
-        Enemy enemy;
-        Enemy enemy2;
-        Enemy enemy3;
-        Enemy enemy4;
 
         public GamePage()
         {
@@ -24,16 +21,12 @@ namespace GridDemos.Views.XAML
             btnup.HeightRequest = 58;
             btndown.HeightRequest = 58;
             level = new Level("Template");
-            hero = new Hero("namnet", new Vector2D(6, 5), level);
-            enemy = new Enemy("fiende", new Vector2D(3, 8), 1, 1, 1, level);
-            enemy2 = new Enemy("fiende2", new Vector2D(5, 1), 2, 1, 1, level);
-            enemy3 = new Enemy("fiende3", new Vector2D(1, 3), 3, 1, 1, level);
-            enemy4 = new Enemy("fiende4", new Vector2D(2, 5), 4, 1, 1, level);
-            enemyList.Add(enemy);
-            enemyList.Add(enemy2);
-            enemyList.Add(enemy3);
-            enemyList.Add(enemy4);
-            //enemyList.Add(new Enemy("fiende3", new Vector2D(4,1), 3, 1, 1));
+            hero = new Hero("namnet", playerStartPos, level);
+            // CHANGE ändrat så id tilldelas automatiskt stegrande
+            enemyList.Add(new Enemy("fiende", new Vector2D(0, 9), 5, 1, level));
+            enemyList.Add(new Enemy("fiende2", new Vector2D(8, 0), 5, 1, level));
+            enemyList.Add(new Enemy("fiende3", new Vector2D(9, 3), 5, 1, level));
+            enemyList.Add(new Enemy("fiende4", new Vector2D(9, 9), 5, 1, level));
             gameGrid.Add(new Image
             {
                 StyleId = "heroImage",
@@ -56,7 +49,7 @@ namespace GridDemos.Views.XAML
             DrawMap();
             msg.Text = "";
 
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y},Strength:{hero.Strength}, Lives:{hero.liv}";
+            heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
         }
 
         private async Task gameoverAsync()
@@ -267,7 +260,7 @@ namespace GridDemos.Views.XAML
                     else
                     {
                         hero.liv -= 1;
-                        heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
+                        heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
                         if (hero.liv < 0)
                         {
                             _ = gameoverAsync();
@@ -275,7 +268,7 @@ namespace GridDemos.Views.XAML
                         else
                         {
                             _ = Lose();
-                            hero.Position = new Vector2D(6, 5);
+                            hero.Position = playerStartPos;
                         }
                     }
                 }
@@ -297,49 +290,29 @@ namespace GridDemos.Views.XAML
                 e.Move();
             }
 
-
             if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
             
-            heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, remInd:{hero.remIndex}";
-            //heropos.Text = $"X:{hero.Position.X},Y:{hero.Position.Y}, Strength:{hero.Strength}, Lives:{hero.liv}";
-                gameGrid.Add(new Image
+            heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
+            gameGrid.Add(new Image
                 {
                     Source = ImageSource.FromFile(heroFileName),
                     ZIndex = 1,
-                    //StyleId = "test",
-                    //ClassId = "test",
                 }, hero.Position.X, hero.Position.Y);
             hero.remIndex = gameGrid.Count - 1;
             
-
-            //Image element = this.FindByName<Image>("test");
             foreach (Enemy e in enemyList)
             {
                 if (!e.dead)
                 {
-                    //e.Move();
-                    //if (CollideEnemy() != 0) stridres = strid(CollideEnemy());
                     if (!e.dead)
                     {
                         gameGrid.Add(new Image
                         {
                             Source = ImageSource.FromFile("orc.png"),
                             ZIndex = 1,
-                            //StyleId = "test",
-                            //ClassId = "test",
                         }, e.Position.X, e.Position.Y);
                         e.remIndex = gameGrid.Count - 1;
                     }
-                    //else if (stridres != 0)
-                    //{
-                    //    gameGrid.Add(new Image
-                    //    {
-                    //        Source = ImageSource.FromFile("tombstone.png"),
-                    //        ZIndex = 0,
-                    //        //StyleId = "test",
-                    //        //ClassId = "test",
-                    //    }, e.Position.X, e.Position.Y);
-                    //}
                 }
 
             }
@@ -392,7 +365,6 @@ namespace GridDemos.Views.XAML
         }
         public void RemoveNumByPos(Vector2D plpos)
         {
-            //int lastRemoved = 0;
             foreach (Pickup p in pickups)
             {
                 if ((p.Vector.X == plpos.X) && (p.Vector.Y == plpos.Y))
@@ -597,6 +569,7 @@ namespace GridDemos.Views.XAML
 
     class Enemy : Actor
     {
+        static int ID = 1;
         public int Id { set; get; }
         public int Strength { set; get; }
         public int Behaviour { set; get; }
@@ -607,9 +580,9 @@ namespace GridDemos.Views.XAML
 
         public Enum Behaviours;
 
-        public Enemy(string name, Vector2D vector, int id, int str, int behaviour, Level lvl) : base(name, vector)
+        public Enemy(string name, Vector2D vector, int str, int behaviour, Level lvl) : base(name, vector)
         {
-            Id = id;
+            Id = ID++;
             Strength = str;
             Behaviour = behaviour;
             Lvl = lvl;
@@ -718,17 +691,29 @@ namespace GridDemos.Views.XAML
             Height = 10;
             Name = name;
             bpLines = new string[]
-            {
-            "T bTFFSFFT",
-            "t    2 11T",
-            "t  TTRW11F",
-            "T  TSTW11T",
-            "F  T     F",
-            "T       TS",
-            "T TR    FT",
-            "F FTW  TFF",
-            "T   W  bTS",
-            "bbTbSSTSST"};
+{
+            "   1TbTT2S",
+            " TF      S",
+            " Tb WTbT T",
+            "1  1   T  ",
+            "T b  T2F  ",
+            "F SW TbT  ",
+            "F  T      ",
+            "T     TbT ",
+            "F STb T4W ",
+            "  T2      "};
+            //bpLines = new string[]
+            //{
+            //"T bTFFSFFT",
+            //"t    2 11T",
+            //"t  TTRW11F",
+            //"T  TSTW11T",
+            //"F  T     F",
+            //"T       TS",
+            //"T TR    FT",
+            //"F FTW  TFF",
+            //"T   W  bTS",
+            //"bbTbSSTSST"};
             bpArray = StringArrToCharArr(bpLines);
             Difficulty = 0;
         }
