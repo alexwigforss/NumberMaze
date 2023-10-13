@@ -15,7 +15,7 @@
        FontAttributes="Bold"
 />
 
-        <Label Text="This game is used to develop the players knowledge of math."
+        <Label Text="This game is used to develop the player's knowledge of math."
 />
         <Label Text=" "/>
         
@@ -24,15 +24,15 @@
         />
 
         <Label
-            Text="In each map the player will control a hero character. The goal is to increase your heros strength by picking up numbers on the map. The number will be added to your heros strength. Be careful of the enemies that are on the lookout for you. Defeat them when you have gained enough strength. You win by defeating all enemies."
+            Text="In each map, the player will control a hero character. The goal is to increase your hero's strength by picking up numbers on the map. The number will be added to your hero's strength. Be careful of the enemies that are on the lookout for you. Defeat them when you have gained enough strength. You win by defeating all enemies."
         />
 
         <Label Text=" "/>
         
         <Label Text="Controling the hero:"
                FontAttributes="Bold"/>
-        
-        <Label Text="Use the arrow buttons at the bottom to move the hero in different directions." />
+
+        <Label Text="Use the arrow buttons at the bottom to move the hero in different directions. The orcs will take one step in a random direction each time you move." />
 
         <Label Text=" "/>
         <Image Source="orc.png"
