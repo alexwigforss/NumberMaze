@@ -38,11 +38,11 @@
         <Image Source="orc.png"
                HeightRequest="50"
                />
-        <Label Text="The green orc have a strength of 5"/>
+        <Label Text="The green orc has a strength of 5"/>
         <Image Source="red_orc.png"
                HeightRequest="50"
                />
-        <Label Text="The red orc have a strength of 10"/>
+        <Label Text="The red orc has a strength of 10"/>
 
     </VerticalStackLayout>
 </ContentPage>
