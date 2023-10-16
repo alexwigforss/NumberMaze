@@ -14,12 +14,13 @@ namespace GridDemos.Views.XAML
         readonly Hero hero;
 
         Image heroImg, heroImgLeft, heroImgRight;
+        Image[] enemyImgs;
 
         public GamePage()
         {
             hasPressedQuit = false;
             InitializeComponent();
-            btnup.HeightRequest = 58;
+            btnup.HeightRequest =  58;
             btndown.HeightRequest = 58;
             level = new Level("Template");
             hero = new Hero("namnet", playerStartPos, level);
@@ -51,6 +52,7 @@ namespace GridDemos.Views.XAML
 
             foreach (Enemy e in enemyList)
             {
+                // TBD bygg om till att returnera en bild
                 string enemyFileName = ChoseEnemyImage(e);
 
                 gameGrid.Add(new Image
@@ -61,13 +63,25 @@ namespace GridDemos.Views.XAML
                 e.remIndex = gameGrid.Count - 1;
             }
 
+            //foreach (Enemy e in enemyList)
+            //{
+            //    string enemyFileName = ChoseEnemyImage(e);
+
+            //    gameGrid.Add(new Image
+            //    {
+            //        Source = ImageSource.FromFile(enemyFileName),
+            //        ZIndex = 1,
+            //    }, e.Position.X, e.Position.Y);
+            //    e.remIndex = gameGrid.Count - 1;
+            //}
+
             DrawMap();
             msg.Text = "";
 
             // heropos.Text = gameGrid.GetChildElements(new Point(100,100)).ToString();
             heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
         }
-
+        // TBD bygg om till att returnera en bild
         private static string ChoseEnemyImage(Enemy e)
         {
             string enemyFileName = "orc.png";
