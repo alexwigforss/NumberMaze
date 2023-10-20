@@ -72,31 +72,44 @@
         <BoxView Grid.Row="2"
                  Color="DarkGrey" />
         <!-- Buttons -->
-        <HorizontalStackLayout Grid.Row="2">
-
-
-            <Button Text="LEFT"
+        
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+             <Button Text="LEFT"
+                    Grid.Column="0"
+                    Grid.RowSpan="2"
                     x:Name="btnleft"
-                    WidthRequest="100"
                     Clicked="Button_Left_Clicked"
                     />
-            <VerticalStackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                <Button Text="UP"
+                    
+             <Button Text="UP"
+                    Grid.Column="1"
+                    Grid.Row="0"
                     x:Name="btnup"
-                    WidthRequest="200"
                     Clicked="Button_Up_Clicked"
-                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                     />
-                <Button Text="DOWN" 
+             <Button Text="DOWN" 
+                    Grid.Column="1"
+                    Grid.Row="1"
                     x:Name="btndown"
                     Clicked="Button_Down_Clicked"
-                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"
                     />
-            </VerticalStackLayout>
             <Button Text="RIGHT" 
-                    WidthRequest="100"
+                    Grid.Column="2"
+                    Grid.RowSpan="2"
                     Clicked="Button_Right_Clicked"
                     />
-        </HorizontalStackLayout>
+        </Grid>
+        
     </Grid>
 </ContentPage>

@@ -14,72 +14,73 @@ namespace GridDemos.Views.XAML
         readonly Hero hero;
 
         Image heroImg, heroImgLeft, heroImgRight;
-        Image[] enemyImgs;
-
+        Image enemyImg;
+        List<Image> enemyImgList = new();
         public GamePage()
         {
             hasPressedQuit = false;
-            InitializeComponent();
-            btnup.HeightRequest =  58;
-            btndown.HeightRequest = 58;
-            level = new Level("Template");
-            hero = new Hero("namnet", playerStartPos, level);
 
+            getHeroImgSources();
+
+            level = new Level("Template");
             // CHANGE ändrat så id tilldelas automatiskt stegrande i konstruktören
             enemyList.Add(new Enemy("greenorc", new Vector2D(0, 9), 5, 1, level));
             enemyList.Add(new Enemy("greenorc", new Vector2D(8, 0), 5, 1, level));
             enemyList.Add(new Enemy("greenorc", new Vector2D(9, 3), 5, 1, level));
             enemyList.Add(new Enemy("redorc", new Vector2D(9, 9), 10, 1, level));
 
-            heroImg = new Image
-            {
-                Source = ImageSource.FromFile("walk_attack2.png"),
-                ZIndex = 1,
-            };
-            heroImgLeft = new Image
-            {
-                Source = ImageSource.FromFile("walk_attack2left.png"),
-                ZIndex = 1,
-            };
-            heroImgRight = new Image
-            {
-                Source = ImageSource.FromFile("walk_attack2.png"),
-                ZIndex = 1,
-            };
+            getEnemyImgs();
+
+            InitializeComponent();
+            hero = new Hero("namnet", playerStartPos, level);
 
             gameGrid.Add(heroImg, hero.Position.X, hero.Position.Y);
             hero.remIndex = gameGrid.Count - 1;
 
-            foreach (Enemy e in enemyList)
+            for (int i = 0; i < enemyList.Count; i++)
             {
-                // TBD bygg om till att returnera en bild
-                string enemyFileName = ChoseEnemyImage(e);
-
-                gameGrid.Add(new Image
-                {
-                    Source = ImageSource.FromFile(enemyFileName),
-                    ZIndex = 1,
-                }, e.Position.X, e.Position.Y);
+                Enemy e = enemyList[i];
+                gameGrid.Add(enemyImgList[i], e.Position.X, e.Position.Y);
                 e.remIndex = gameGrid.Count - 1;
             }
-
-            //foreach (Enemy e in enemyList)
-            //{
-            //    string enemyFileName = ChoseEnemyImage(e);
-
-            //    gameGrid.Add(new Image
-            //    {
-            //        Source = ImageSource.FromFile(enemyFileName),
-            //        ZIndex = 1,
-            //    }, e.Position.X, e.Position.Y);
-            //    e.remIndex = gameGrid.Count - 1;
-            //}
 
             DrawMap();
             msg.Text = "";
 
-            // heropos.Text = gameGrid.GetChildElements(new Point(100,100)).ToString();
             heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
+
+            void getHeroImgSources()
+            {
+                heroImg = new Image
+                {
+                    Source = ImageSource.FromFile("walk_attack2.png"),
+                    ZIndex = 1,
+                };
+                heroImgLeft = new Image
+                {
+                    Source = ImageSource.FromFile("walk_attack2left.png"),
+                    ZIndex = 1,
+                };
+                heroImgRight = new Image
+                {
+                    Source = ImageSource.FromFile("walk_attack2.png"),
+                    ZIndex = 1,
+                };
+            }
+
+            void getEnemyImgs()
+            {
+                foreach (Enemy e in enemyList)
+                {
+                    string enemyFileName = ChoseEnemyImage(e);
+                    enemyImg = new Image
+                    {
+                        Source = ImageSource.FromFile(enemyFileName),
+                        ZIndex = 1,
+                    };
+                    enemyImgList.Add(enemyImg);
+                }
+            }
         }
         // TBD bygg om till att returnera en bild
         private static string ChoseEnemyImage(Enemy e)
@@ -335,24 +336,19 @@ namespace GridDemos.Views.XAML
 
 
 
-            foreach (Enemy e in enemyList)
+            for (int i = 0; i < enemyList.Count; i++)
             {
+                Enemy e = enemyList[i];
                 if (!e.dead)
                 {
                     if (!e.dead)
                     {
-                        string enemyFileName = ChoseEnemyImage(e);
-
-                        gameGrid.Add(new Image
-                        {
-                            Source = ImageSource.FromFile(enemyFileName),
-                            ZIndex = 1,
-                        }, e.Position.X, e.Position.Y);
+                        gameGrid.Add(enemyImgList[i], e.Position.X, e.Position.Y);
                         e.remIndex = gameGrid.Count - 1;
                     }
                 }
-
             }
+
             bool allisdead = true;
             foreach (Enemy e in enemyList)
             {
