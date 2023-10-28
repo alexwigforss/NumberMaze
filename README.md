@@ -1,10 +1,3 @@
-# NumberMaze
-### Projektbbeskrivning
-Ett skolprojekt där vi utforskar möjligheten att bygga ett enklare dungeon labyrint spel med .net MAUI
-
-Ambitionen är att ta fram ett spelbart demo.
-Spelet går ut på att samla på sig ett styrkevärde som man adderar till för att kunna besegra banans monster.
-
 # Projektbeskrivning
 Spelbeskrivning: Skapa ett spel som innehåller olika objekt såsom en interaktiv hjälte som en användare kan
 kontrollera, fiender, matematiska operatorer, siffror,.Dessa objekt placeras på en bana i “top-down” vy.
