@@ -12,12 +12,14 @@ namespace GridDemos.Views.XAML
         bool hasPressedQuit;
         readonly Level level;
         readonly Hero hero;
-
+        
         Image heroImg, heroImgLeft, heroImgRight;
         Image enemyImg;
         List<Image> enemyImgList = new();
+
         public GamePage()
         {
+            // DisplayAlert("OnConstruct", "Construct", "Ok");
             hasPressedQuit = false;
 
             getHeroImgSources();
@@ -25,8 +27,74 @@ namespace GridDemos.Views.XAML
             level = new Level("Template");
             // CHANGE ändrat så id tilldelas automatiskt stegrande i konstruktören
             enemyList.Add(new Enemy("greenorc", new Vector2D(0, 9), 5, 1, level));
-            enemyList.Add(new Enemy("greenorc", new Vector2D(8, 0), 5, 1, level));
-            enemyList.Add(new Enemy("greenorc", new Vector2D(9, 3), 5, 1, level));
+            // enemyList.Add(new Enemy("greenorc", new Vector2D(8, 0), 5, 1, level));
+            // enemyList.Add(new Enemy("greenorc", new Vector2D(9, 3), 5, 1, level));
+            // enemyList.Add(new Enemy("redorc", new Vector2D(9, 9), 10, 1, level));
+
+            getEnemyImgs();
+
+            InitializeComponent();
+            hero = new Hero("namnet", playerStartPos, level);
+
+            gameGrid.Add(heroImg, hero.Position.X, hero.Position.Y);
+            hero.remIndex = gameGrid.Count - 1;
+
+            for (int i = 0; i < enemyList.Count; i++)
+            {
+                Enemy e = enemyList[i];
+                gameGrid.Add(enemyImgList[i], e.Position.X, e.Position.Y);
+                e.remIndex = gameGrid.Count - 1;
+            }
+
+            DrawMap();
+            msg.Text = "";
+
+            heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
+
+            void getHeroImgSources()
+            {
+                heroImg = new Image
+                {
+                    Source = ImageSource.FromFile("walk_attack2.png"),
+                    ZIndex = 1,
+                };
+                heroImgLeft = new Image
+                {
+                    Source = ImageSource.FromFile("walk_attack2left.png"),
+                    ZIndex = 1,
+                };
+                heroImgRight = new Image
+                {
+                    Source = ImageSource.FromFile("walk_attack2.png"),
+                    ZIndex = 1,
+                };
+            }
+
+            void getEnemyImgs()
+            {
+                foreach (Enemy e in enemyList)
+                {
+                    string enemyFileName = ChoseEnemyImage(e);
+                    enemyImg = new Image
+                    {
+                        Source = ImageSource.FromFile(enemyFileName),
+                        ZIndex = 1,
+                    };
+                    enemyImgList.Add(enemyImg);
+                }
+            }
+        }
+        public GamePage(int l)
+        {
+            hasPressedQuit = false;
+
+            getHeroImgSources();
+
+            level = new Level("Template");
+            // CHANGE ändrat så id tilldelas automatiskt stegrande i konstruktören
+            //enemyList.Add(new Enemy("greenorc", new Vector2D(0, 9), 5, 1, level));
+            //enemyList.Add(new Enemy("greenorc", new Vector2D(8, 0), 5, 1, level));
+            //enemyList.Add(new Enemy("greenorc", new Vector2D(9, 3), 5, 1, level));
             enemyList.Add(new Enemy("redorc", new Vector2D(9, 9), 10, 1, level));
 
             getEnemyImgs();
@@ -82,6 +150,11 @@ namespace GridDemos.Views.XAML
                 }
             }
         }
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+        }
+
         // TBD bygg om till att returnera en bild
         private static string ChoseEnemyImage(Enemy e)
         {
@@ -105,12 +178,13 @@ namespace GridDemos.Views.XAML
         }
         private async Task LevelCleared()
         {
-            bool answer = await DisplayAlert("Congratulations", "You cleared the map\n In this demo we got only one level\n Stay tuned for more levels\n Would you like to go back to the menu?", "Yes", "Quit");
+            bool answer = await DisplayAlert("Congratulations", "You cleared the map\n In this demo we got only one level\n Stay tuned for more levels\n Ready for next level?", "Yes", "No");
             if (answer)
             {
-                await Navigation.PopAsync(false);
+                await Navigation.PushAsync(new GamePage(1));
             }
-            else System.Environment.Exit(0);
+            else await Navigation.PushAsync(new MainPage());
+            //else await Navigation.PopAsync(false);
         }
         private bool DrawMap()
         {
@@ -712,17 +786,17 @@ namespace GridDemos.Views.XAML
         public static int Width { set; get; }
         public static int Height { set; get; }
 
-        public Level(string name)
+        public Level(string name, int nr = 0)
         {
             Width = 10;
             Height = 10;
             Name = name;
             bpLines = new string[]
-{
+        {
             "   1TbTT2S",
             " TF      S",
             " Tb WTbT T",
-            "1  1   T  ",
+            "5  1   T  ",
             "T b  T2F  ",
             "F SW TbT  ",
             "F  T      ",
