@@ -178,7 +178,7 @@ namespace GridDemos.Views.XAML
         }
         private async Task LevelCleared()
         {
-            bool answer = await DisplayAlert("Congratulations", "You cleared the map\n In this demo we got only one level\n Stay tuned for more levels\n Ready for next level?", "Yes", "No");
+            bool answer = await DisplayAlert("Congratulations", "You cleared the map\n Ready for next level?", "Yes", "No");
             if (answer)
             {
                 await Navigation.PushAsync(new GamePage(1));
