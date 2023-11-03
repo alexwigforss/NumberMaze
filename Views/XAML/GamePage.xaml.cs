@@ -12,7 +12,7 @@ namespace GridDemos.Views.XAML
         bool hasPressedQuit;
         readonly Level level;
         readonly Hero hero;
-        
+
         Image heroImg, heroImgLeft, heroImgRight;
         Image enemyImg;
         List<Image> enemyImgList = new();
@@ -25,11 +25,7 @@ namespace GridDemos.Views.XAML
             getHeroImgSources();
 
             level = new Level("Template");
-            // CHANGE ändrat så id tilldelas automatiskt stegrande i konstruktören
             enemyList.Add(new Enemy("greenorc", new Vector2D(0, 9), 5, 1, level));
-            // enemyList.Add(new Enemy("greenorc", new Vector2D(8, 0), 5, 1, level));
-            // enemyList.Add(new Enemy("greenorc", new Vector2D(9, 3), 5, 1, level));
-            // enemyList.Add(new Enemy("redorc", new Vector2D(9, 9), 10, 1, level));
 
             getEnemyImgs();
 
@@ -87,18 +83,10 @@ namespace GridDemos.Views.XAML
         public GamePage(int l)
         {
             hasPressedQuit = false;
-
             getHeroImgSources();
-
             level = new Level("Template");
-            // CHANGE ändrat så id tilldelas automatiskt stegrande i konstruktören
-            //enemyList.Add(new Enemy("greenorc", new Vector2D(0, 9), 5, 1, level));
-            //enemyList.Add(new Enemy("greenorc", new Vector2D(8, 0), 5, 1, level));
-            //enemyList.Add(new Enemy("greenorc", new Vector2D(9, 3), 5, 1, level));
             enemyList.Add(new Enemy("redorc", new Vector2D(9, 9), 10, 1, level));
-
             getEnemyImgs();
-
             InitializeComponent();
             hero = new Hero("namnet", playerStartPos, level);
 
@@ -115,7 +103,7 @@ namespace GridDemos.Views.XAML
             DrawMap();
             msg.Text = "";
 
-            heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
+            heropos.Text = $"Lives:{hero.liv} Strength:{hero.Strength}";
 
             void getHeroImgSources()
             {
@@ -159,7 +147,6 @@ namespace GridDemos.Views.XAML
         private static string ChoseEnemyImage(Enemy e)
         {
             string enemyFileName = "orc.png";
-
             if (e.Strength < 6)
                 enemyFileName = "orc.png";
             else if (e.Strength >= 6)
@@ -169,7 +156,7 @@ namespace GridDemos.Views.XAML
 
         private async Task GameoverAsync()
         {
-            bool answer = await DisplayAlert("Game over!","Would you like to go back to the menu?", "Yes", "Quit");
+            bool answer = await DisplayAlert("Game over!", "Would you like to go back to the menu?", "Yes", "Quit");
             if (answer)
             {
                 await Navigation.PopAsync(false);
@@ -194,109 +181,129 @@ namespace GridDemos.Views.XAML
                 {
                     if (level.BpArray[j, i] == 'T')
                     {
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("fruit_tree2.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (level.BpArray[j, i] == 't')
-					{
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("tree1.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (level.BpArray[j, i] == 'R')
-					{
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("ruins1.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (level.BpArray[j, i] == 'W')
-					{
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("wall.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (level.BpArray[j, i] == 'S')
-					{
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("rock.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (level.BpArray[j, i] == 'F')
-					{
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("fern.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (level.BpArray[j, i] == 'b')
-					{
-						gameGrid.Add(new Image
-						{
-							Source = ImageSource.FromFile("bush.png"),
-							ZIndex = 1,
-						}, i, j);
-						gameGrid.Add(new BoxView
-						{
-							ZIndex = 0,
-							Color = Colors.DarkGreen
-						}, i, j);
-					}
-					else if (char.IsNumber(level.BpArray[j, i]))
-					{
-						gameGrid.Add(new Label
-						{
-							Text = level.BpArray[j, i].ToString(),
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("fruit_tree2.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (level.BpArray[j, i] == 't')
+                    {
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("tree1.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (level.BpArray[j, i] == 'R')
+                    {
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("ruins1.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (level.BpArray[j, i] == 'W')
+                    {
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("wall.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (level.BpArray[j, i] == 'S')
+                    {
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("rock.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (level.BpArray[j, i] == 'F')
+                    {
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("fern.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (level.BpArray[j, i] == 'b')
+                    {
+                        gameGrid.Add(new Image
+                        {
+                            Source = ImageSource.FromFile("bush.png"),
+                            ZIndex = 1,
+                        }, i, j);
+                        gameGrid.Add(new BoxView
+                        {
+                            ZIndex = 0,
+                            Color = Colors.DarkGreen
+                        }, i, j);
+                    }
+                    else if (char.IsNumber(level.BpArray[j, i]))
+                    {
+                        gameGrid.Add(new Label
+                        {
+                            Text = level.BpArray[j, i].ToString(),
                             HorizontalTextAlignment = TextAlignment.Center,
                             VerticalTextAlignment = TextAlignment.Center,
-							ZIndex = 1,
-						}, i, j);
-                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count-1));
-					}
-				}
+                            ZIndex = 1,
+                        }, i, j);
+                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count - 1));
+                    }
+                    else if (IsOperator(level.BpArray[j, i]))
+                    {
+                        gameGrid.Add(new Label
+                        {
+                            Text = level.BpArray[j, i].ToString(),
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            VerticalTextAlignment = TextAlignment.Center,
+                            ZIndex = 1,
+                        }, i, j);
+                        pickups.Add(new Pickup(level.BpArray[j, i], new Vector2D(i, j), gameGrid.Count - 1));
+                    }
+                }
             }
             return true;
+        }
+
+        public bool IsOperator(char v)
+        {
+            if (v == '+') {  return true; }
+            if (v == '-') { return true; }
+            if (v == '*') { return true; }
+            if (v == '/') { return true; }
+            return false;
         }
 
         private void Remove()
@@ -327,14 +334,14 @@ namespace GridDemos.Views.XAML
             }
         }
 
-       
+
 
         private int CollideEnemy()
         {
             int result = 0;
             foreach (Enemy e in enemyList)
             {
-                if (hero.Position.X == e.Position.X && hero.Position.Y == e.Position.Y && !e.dead )
+                if (hero.Position.X == e.Position.X && hero.Position.Y == e.Position.Y && !e.dead)
                 {
                     result = e.Id;
                 }
@@ -372,7 +379,7 @@ namespace GridDemos.Views.XAML
                             _ = GameoverAsync();
                             hasPressedQuit = true;
                         }
-                        else if(!hasPressedQuit)
+                        else if (!hasPressedQuit)
                         {
                             _ = Lose();
                             hero.Position = playerStartPos;
@@ -402,7 +409,7 @@ namespace GridDemos.Views.XAML
             }
 
             if (CollideEnemy() != 0) _ = Strid(CollideEnemy());
-            
+
             heropos.Text = $"Lives:{hero.liv}            Strength:{hero.Strength}";
 
             gameGrid.Add(heroImg, hero.Position.X, hero.Position.Y);
@@ -426,7 +433,7 @@ namespace GridDemos.Views.XAML
             bool allisdead = true;
             foreach (Enemy e in enemyList)
             {
-                if(!e.dead)
+                if (!e.dead)
                     allisdead = false;
             }
             if (allisdead)
@@ -435,7 +442,7 @@ namespace GridDemos.Views.XAML
         private void Button_Left_Clicked(object sender, EventArgs e)
         {
             Remove();
-            hero.Move(0,out bool wasNum);
+            hero.Move(0, out bool wasNum);
             if (wasNum)
             {
                 RemoveNumByPos(hero.Position);
@@ -525,7 +532,7 @@ namespace GridDemos.Views.XAML
             Name = name;
             Position = position;
         }
-
+        // TBD fixa så att operatorerna inte blockerar vägen.
         public virtual void Move() { }
         public static bool CollideWall(Vector2D position, Level level, int direction)
         {
@@ -538,11 +545,11 @@ namespace GridDemos.Views.XAML
             {
                 collide = true;
             }
-            if (direction == 2 && level.BpArray[position.Y + 1,position.X] != ' ' && !Char.IsNumber(level.BpArray[position.Y + 1, position.X]))
+            if (direction == 2 && level.BpArray[position.Y + 1, position.X] != ' ' && !Char.IsNumber(level.BpArray[position.Y + 1, position.X]))
             {
                 collide = true;
             }
-            if (direction == 3 && level.BpArray[position.Y,position.X + 1] != ' ' && !Char.IsNumber(level.BpArray[position.Y, position.X + 1]))
+            if (direction == 3 && level.BpArray[position.Y, position.X + 1] != ' ' && !Char.IsNumber(level.BpArray[position.Y, position.X + 1]))
             {
                 collide = true;
             }
@@ -631,49 +638,49 @@ namespace GridDemos.Views.XAML
         public int Move(int direction, out bool wNum)
         {
             wNum = false;
-            //Left
+            // Left
             oldPosition = Position;
             if (direction == 0 && Position.X > 0 && Actor.CollideWallOrNum(Position, lvl, 0) == 0)
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
-            else if(direction == 0 && Actor.CollideWallOrNum(Position, lvl, 0) > 0)
+            else if (direction == 0 && Actor.CollideWallOrNum(Position, lvl, 0) > 0)
             {
                 Strength += Actor.CollideWallOrNum(Position, lvl, 0);
                 Position = new Vector2D(Position.X - 1, Position.Y);
-                lvl.BpArray[Position.Y,Position.X] = ' ';
+                lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
             }
-            //Up
+            // Up
             if (direction == 1 && Position.Y > 0 && Actor.CollideWallOrNum(Position, lvl, 1) == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
-            else if(direction == 1 && Actor.CollideWallOrNum(Position, lvl, 1) > 0)
+            else if (direction == 1 && Actor.CollideWallOrNum(Position, lvl, 1) > 0)
             {
                 Strength += Actor.CollideWallOrNum(Position, lvl, 1);
                 Position = new Vector2D(Position.X, Position.Y - 1);
                 lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
             }
-            //Down
+            // Down
             if (direction == 2 && Position.Y < 9 && Actor.CollideWallOrNum(Position, lvl, 2) == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
-            else if(direction == 2 && Actor.CollideWallOrNum(Position, lvl, 2) > 0)
+            else if (direction == 2 && Actor.CollideWallOrNum(Position, lvl, 2) > 0)
             {
                 Strength += Actor.CollideWallOrNum(Position, lvl, 2);
                 Position = new Vector2D(Position.X, Position.Y + 1);
                 lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
             }
-            //Right
+            // Right
             if (direction == 3 && Position.X < 9 && Actor.CollideWallOrNum(Position, lvl, 3) == 0)
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
-            else if(direction == 3 && Actor.CollideWallOrNum(Position, lvl, 3) > 0)
+            else if (direction == 3 && Actor.CollideWallOrNum(Position, lvl, 3) > 0)
             {
                 Strength += Actor.CollideWallOrNum(Position, lvl, 3);
                 Position = new Vector2D(Position.X + 1, Position.Y);
@@ -681,6 +688,15 @@ namespace GridDemos.Views.XAML
                 wNum = true;
             }
             return direction;
+        }
+
+        private bool IsOperator(char v)
+        {
+            if (v == '+') { return true; }
+            if (v == '-') { return true; }
+            if (v == '*') { return true; }
+            if (v == '/') { return true; }
+            return false;
         }
     }
 
@@ -708,7 +724,7 @@ namespace GridDemos.Views.XAML
         public override void Move()
         {
             Random rnd = new();
-            direction = rnd.Next(0,4);
+            direction = rnd.Next(0, 4);
             //Up
             if (direction == 0 && Position.X > 0 && !Actor.CollideWall(Position, lvl, 0))
             {
@@ -769,7 +785,13 @@ namespace GridDemos.Views.XAML
 
         public Operator(Vector2D vector, char[] signs) : base(vector)
         {
-            Signs = signs;
+            Signs = new[]
+            {
+                '+',
+                '-',
+                '*',
+                '/'
+            };
         }
 
     }
@@ -794,13 +816,13 @@ namespace GridDemos.Views.XAML
             bpLines = new string[]
         {
             "   1TbTT2S",
-            " TF      S",
+            " TF    + S",
             " Tb WTbT T",
-            "5  1   T  ",
+            "5  1/  T  ",
             "T b  T2F  ",
             "F SW TbT  ",
-            "F  T      ",
-            "T     TbT ",
+            "F  T   -  ",
+            "T  *  TbT ",
             "F STb T4W ",
             "  T2      "};
             bpArray = StringArrToCharArr(bpLines);

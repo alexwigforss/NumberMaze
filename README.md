@@ -18,3 +18,6 @@ som addition, subtraktion, multiplikation och division.
 
 # Beroenden
 Byggt med MAUI .NET 7.0
+
+# Wishlist
+A touch of ai and sight for the Orcs
