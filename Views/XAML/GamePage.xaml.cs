@@ -532,7 +532,6 @@ namespace GridDemos.Views.XAML
             Name = name;
             Position = position;
         }
-        // TBD fixa så att operatorerna inte blockerar vägen.
         public virtual void Move() { }
         public static bool CollideWall(Vector2D position, Level level, int direction)
         {
@@ -566,7 +565,7 @@ namespace GridDemos.Views.XAML
                         int slask = level.BpArray[position.Y, position.X - 1];
                         return slask - 48;
                     }
-                    return -1;
+                    return IsOperator(level.BpArray[position.Y, position.X + 1]);
                 }
                 if (direction == 1 && level.BpArray[position.Y - 1, position.X] != ' ')
                 {
@@ -575,7 +574,7 @@ namespace GridDemos.Views.XAML
                         int slask = level.BpArray[position.Y - 1, position.X];
                         return slask - 48;
                     }
-                    return -1;
+                    return IsOperator(level.BpArray[position.Y, position.X + 1]);
                 }
                 if (direction == 2 && level.BpArray[position.Y + 1, position.X] != ' ')
                 {
@@ -584,7 +583,7 @@ namespace GridDemos.Views.XAML
                         int slask = level.BpArray[position.Y + 1, position.X];
                         return slask - 48;
                     }
-                    return -1;
+                    return IsOperator(level.BpArray[position.Y, position.X + 1]);
                 }
                 if (direction == 3 && level.BpArray[position.Y, position.X + 1] != ' ')
                 {
@@ -593,7 +592,7 @@ namespace GridDemos.Views.XAML
                         int slask = level.BpArray[position.Y, position.X + 1];
                         return slask - 48;
                     }
-                    return -1;
+                    return IsOperator(level.BpArray[position.Y, position.X + 1]);
                 }
                 return 0;
             }
@@ -606,10 +605,20 @@ namespace GridDemos.Views.XAML
                         int slask = level.BpArray[position.Y, position.X];
                         return slask - 48;
                     }
-                    return -1;
+                    return IsOperator(level.BpArray[position.Y, position.X + 1]);
                 }
                 return 0;
             }
+        }
+
+        private static int IsOperator(char v)
+        {
+            if (v == '-') return -1;
+            else if (v == '+') return -2;
+            else if (v == '*') return -3;
+            else if (v == '/') return -4;
+            // Set to zero for now, if we want to pick up more things later we can continue down the neg space
+            return 0;
         }
     }
 
@@ -638,65 +647,98 @@ namespace GridDemos.Views.XAML
         public int Move(int direction, out bool wNum)
         {
             wNum = false;
-            // Left
+            // TBD Onödigt att anropa Collidewall or num så många gånger.
+            // Borde prova istället att hämta den till local vaiabel först
+
+            int nexStep = Actor.CollideWallOrNum(Position, lvl, 0);
+            //  > 0      = Is a number
+            //  0        = Empty space.
+            //  -4 to -1 = Is Operator
+
             oldPosition = Position;
-            if (direction == 0 && Position.X > 0 && Actor.CollideWallOrNum(Position, lvl, 0) == 0)
+
+            /////////////////////
+            // Left             /
+            /////////////////////
+            if (direction == 0 && Position.X > 0 && nexStep == 0)
             {
                 Position = new Vector2D(Position.X - 1, Position.Y);
             }
-            else if (direction == 0 && Actor.CollideWallOrNum(Position, lvl, 0) > 0)
+            else if (direction == 0 && nexStep > 0)
             {
-                Strength += Actor.CollideWallOrNum(Position, lvl, 0);
+                Strength += nexStep;
                 Position = new Vector2D(Position.X - 1, Position.Y);
                 lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
             }
-            // Up
-            if (direction == 1 && Position.Y > 0 && Actor.CollideWallOrNum(Position, lvl, 1) == 0)
+            else if (direction == 0 && nexStep > -5)
+            {
+                // -1 '-' 
+                // -2 '+' 
+                // -3 '*' 
+                // -4 '/' 
+                // -5 Other blocking
+            }
+            if (direction == 1 && Position.Y > 0 && nexStep == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y - 1);
             }
-            else if (direction == 1 && Actor.CollideWallOrNum(Position, lvl, 1) > 0)
+            else if (direction == 1 && nexStep > 0)
             {
-                Strength += Actor.CollideWallOrNum(Position, lvl, 1);
+                Strength += nexStep;
                 Position = new Vector2D(Position.X, Position.Y - 1);
                 lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
+            }
+            else if (direction == 0 && nexStep > -5)
+            {
+                // -1 '-' 
+                // -2 '+' 
+                // -3 '*' 
+                // -4 '/' 
+                // -5 Other blocking
             }
             // Down
-            if (direction == 2 && Position.Y < 9 && Actor.CollideWallOrNum(Position, lvl, 2) == 0)
+            if (direction == 2 && Position.Y < 9 && nexStep == 0)
             {
                 Position = new Vector2D(Position.X, Position.Y + 1);
             }
-            else if (direction == 2 && Actor.CollideWallOrNum(Position, lvl, 2) > 0)
+            else if (direction == 2 && nexStep > 0)
             {
-                Strength += Actor.CollideWallOrNum(Position, lvl, 2);
+                Strength += nexStep;
                 Position = new Vector2D(Position.X, Position.Y + 1);
                 lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
+            }
+            else if (direction == 0 && nexStep > -5)
+            {
+                // -1 '-' 
+                // -2 '+' 
+                // -3 '*' 
+                // -4 '/' 
+                // -5 Other blocking
             }
             // Right
-            if (direction == 3 && Position.X < 9 && Actor.CollideWallOrNum(Position, lvl, 3) == 0)
+            if (direction == 3 && Position.X < 9 && nexStep == 0)
             {
                 Position = new Vector2D(Position.X + 1, Position.Y);
             }
-            else if (direction == 3 && Actor.CollideWallOrNum(Position, lvl, 3) > 0)
+            else if (direction == 3 && nexStep > 0)
             {
-                Strength += Actor.CollideWallOrNum(Position, lvl, 3);
+                Strength += nexStep;
                 Position = new Vector2D(Position.X + 1, Position.Y);
                 lvl.BpArray[Position.Y, Position.X] = ' ';
                 wNum = true;
             }
+            else if (direction == 0 && nexStep > -5)
+            {
+                // -1 '-' 
+                // -2 '+' 
+                // -3 '*' 
+                // -4 '/' 
+                // -5 Other blocking
+            }
             return direction;
-        }
-
-        private bool IsOperator(char v)
-        {
-            if (v == '+') { return true; }
-            if (v == '-') { return true; }
-            if (v == '*') { return true; }
-            if (v == '/') { return true; }
-            return false;
         }
     }
 
@@ -815,10 +857,10 @@ namespace GridDemos.Views.XAML
             Name = name;
             bpLines = new string[]
         {
-            "   1TbTT2S",
+            "    TbTT2S",
             " TF    + S",
             " Tb WTbT T",
-            "5  1/  T  ",
+            "    /  T  ",
             "T b  T2F  ",
             "F SW TbT  ",
             "F  T   -  ",
